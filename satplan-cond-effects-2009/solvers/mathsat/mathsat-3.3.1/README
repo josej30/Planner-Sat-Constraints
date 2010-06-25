@@ -1,0 +1,33 @@
+MathSAT 3.3.1
+=============
+
+This archive contains:
+
+mathsat			the mathsat executable
+README			this file
+
+To run mathsat on a file named "example.msat", do the following:
+
+- gunzip-untar the archive in a proper place
+- ensure mathsat has execution permission
+  (change the file rights if needed)
+
+The script will run mathsat with the default command-line options.
+
+
+Usage
+=====
+
+For .smt files:
+
+./mathsat -input=smt <file>	  ( the configuration is read in the file header )
+
+  For .msat files:
+
+./mathsat -config=QF_X <file>  ( if <file> belongs to QF_X theory )
+
+
+
+For help about command-line options, try:
+
+"./mathsat -h"

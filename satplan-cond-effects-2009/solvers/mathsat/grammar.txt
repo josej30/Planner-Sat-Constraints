@@ -1,0 +1,97 @@
+This is a more-or-less human-readable form of the grammar for the
+language accepted by mathsat.
+
+Notes:
+	* Not everything that fits this grammar is legal input: the 
+	  input also has to be well-typed. 
+	* Operator precedence is not specified here. It mimics the
+	  precedence in C.
+	* Comments start with '#' and extend to the end of the line.
+
+all:
+	variables_section					(declaration of variables)
+        defines_section						(declaration of defines)
+	const_section						(declaration of enumerated constants)
+	formula_section
+	variables_section all
+        defines_section all
+	const_section all
+	formula_section all
+
+variables_section:
+	'VAR' variable_declaration ... variable_declaration
+
+variable_declaration:
+	IDENTIFIER ',' ... ',' IDENTIFIER ':' type
+
+defines_section:
+	'DEFINE' define_declaration ... define_declaration
+
+define_declaration:
+	IDENTIFIER ':' simple_type ':=' formula
+
+type:
+	simple_type
+	compound_type
+
+simple_type:
+	'BOOLEAN'
+	'INTEGER'
+	'WORD' '(' NUMBER ')'					(words with specified number of bits)
+	'REAL'
+	'OBJECT'
+
+compound_type:
+	simple_type '*' ... '*' simple_type '->' simple_type	(uninterpreted functions)
+
+
+const_section:
+	'CONST' const_declaration
+
+const_declaration:
+	IDENTIFIER ',' ... ',' IDENTIFIER
+
+formula_section:
+	'FORMULA' formula
+
+formula:
+	formula '->' formula					(or 'implies' instead of '->')
+	formula '<->' formula					(or 'iff' instead of '<->')
+	formula '&' formula					(or 'and' instead of '&')
+	formula '|' formula					(or 'or' instead of '|')
+	formula 'xor' formula
+	formula 'nand' formula
+	'!' formula						(or 'not' instead of '!')
+	'ite' '(' formula ',' formula ',' formula ')'		(if-then-else)
+	'(' formula ')'
+	'true'							(boolean constant)
+	'false'							(boolean constant)
+        IDENTIFIER						(boolean variable)
+	math_atom
+
+math_atom:
+	expression '=' expression
+	expression '!=' expression
+	expression '<' expression
+	expression '>' expression
+	expression '<=' expression
+	expression '>=' expression
+
+expression:
+	IDENTIFIER						(mathematical variable)
+	NUMBER							(mathematical constant)
+	expression '*' expression
+	expression '+' expression
+	expression '-' expression
+	'-' expression
+	expression '>>' NUMBER					(right-shift for words)
+	expression '<<' NUMBER					(left-shift for words)
+	IDENTIFIER '[' NUMBER ':' NUMBER ']'			(subword construction from a word)
+        '[' formula, ... , formula ']'				(word constructor)
+	IDENTIFIER '(' expression ',' ... ',' expression ')'	(application of uninterpreted function)
+	'ite' '(' formula ',' expression ',' expression ')'	(if-then-else)
+	'(' expression ')'
+
+IDENTIFIER = [a-zA-Z_][a-zA-Z0-9_]*
+
+NUMBER = [0-9]+

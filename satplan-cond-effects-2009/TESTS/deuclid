@@ -1,0 +1,75 @@
+; Euclidean algorithm:
+;
+; while ( a != b ) {
+;   if ( a > b ) {
+;      a = a - b;
+;   } else {
+;      b = b - a;
+;   }
+; }
+; return a;
+;
+; this planning domain is about proving that, for a particular given pair of 
+; inputs, the return statement will be reachd.
+;
+; NOTE: this is atypical for model checking. in termination proofs, of
+; course one wants to prove that the return statement will be reached for *any*
+; a and b. in this case here, this would be like conformant planning with numbers;
+; in classical planning it cannot be expressed since it requires a "universal quantifier"
+; over the input values, while in classical planning everything (plan existence) is 
+; "existentially quantified"
+;
+; in verifying safety propeties, on the other hand, one would want to find out,
+; like here, whether certain states can be reached. but then the "states" will be
+; undesirable situations, not a desirable situation like in this example here.
+;
+; anyway, as a simple showcase this should do.
+;
+
+
+(define (domain Euclid)
+
+(:types variable line)
+
+(:predicates
+(at ?l - line) ; the "program counter"
+)
+
+(:functions 
+(value ?v - variable)
+)
+
+(:constants
+l1 l2 l3 - line
+a b - variable
+)
+
+; while ( a != b ) {
+(:action line1
+ :parameters ()
+ :precondition (and (at l1))
+ :effect 
+(and 
+(when (not (= (value a) (value b))) (and (at l2) (not (at l1))))
+(when (= (value a) (value b)) (and (at l3) (not (at l1))))
+)
+)
+
+;   if ( a > b ) {
+;      a = a - b;
+;   } else {
+;      b = b - a;
+;   }
+(:action line2
+ :parameters ()
+ :precondition (and (at l2))
+ :effect 
+(and 
+(when (> (value a) (value b))
+(and (decrease (value a) (value b)) (at l1) (not (at l2))))
+(when (<= (value a) (value b))
+(and (decrease (value b) (value a)) (at l1) (not (at l2))))
+)
+)
+
+)

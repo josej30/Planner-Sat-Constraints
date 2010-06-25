@@ -1,0 +1,45 @@
+(define (problem jugs-m10-n10-k10-s2)
+(:domain Jugs)
+
+(:objects jug1 jug2 jug3 jug4 jug5 jug6 jug7 jug8 jug9 jug10  - jug)
+
+(:init
+(= (capacity jug1) 8)
+(= (capacity jug2) 3)
+(= (capacity jug3) 10)
+(= (capacity jug4) 10)
+(= (capacity jug5) 2)
+(= (capacity jug6) 5)
+(= (capacity jug7) 2)
+(= (capacity jug8) 8)
+(= (capacity jug9) 6)
+(= (capacity jug10) 5)
+(= (contents jug1) 0)
+(= (contents jug2) 0)
+(= (contents jug3) 0)
+(= (contents jug4) 0)
+(= (contents jug5) 0)
+(= (contents jug6) 0)
+(= (contents jug7) 0)
+(= (contents jug8) 0)
+(= (contents jug9) 0)
+(= (contents jug10) 0)
+)
+
+(:goal
+(and
+(= (contents jug1) 1)
+(= (contents jug2) 3)
+(= (contents jug3) 7)
+(= (contents jug4) 9)
+(= (contents jug5) 2)
+(= (contents jug6) 3)
+(= (contents jug7) 2)
+(= (contents jug8) 0)
+(= (contents jug9) 5)
+(= (contents jug10) 0)
+)
+)
+
+)
+

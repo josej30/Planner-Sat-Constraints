@@ -1,0 +1,1482 @@
+
+CNF.c,681
+void CNF_initialize(226,7385
+void CNF_extend(406,11846
+void CNF_get_goal(571,15577
+void CNF_retract_goal(655,17747
+void CNF_print(721,18907
+void CNF_print_infostring(850,22075
+void CNF_statistics(946,24196
+void CNF_output(979,24816
+int CNF_output_plan(1021,25530
+int CNF_print_act_table(1078,26477
+Bool CNF_get_action_info(1116,27206
+void CNF_get_constraint_constraintvt(1212,28170
+void CNF_get_psi_psivt(1364,31933
+void CNF_get_pre_con(1511,35363
+void CNF_get_ea_ae(1692,40233
+void CNF_get_eff(1828,43782
+void CNF_get_frame(2058,49870
+Bool ignore_mutex 2292,56150
+void CNF_get_vmutex(2294,56178
+void CNF_get_aemutex(2342,57262
+void CNF_get_eemutex(2471,60133
+
+HCNF.c,586
+void HCNF_initialize(201,5470
+void HCNF_extend(315,8237
+void HCNF_get_goal(429,10632
+void HCNF_retract_goal(500,12498
+void HCNF_print(551,13311
+void HCNF_print_exp(641,15245
+void HCNF_print_infostring(709,16618
+void HCNF_statistics(759,17530
+void HCNF_output(793,18218
+void HCNF_output_exp(967,21379
+void HCNF_get_pre_con(1097,22827
+void HCNF_get_ea_ae(1239,26845
+void HCNF_get_eff(1333,29378
+void HCNF_get_frame(1499,33544
+void HCNF_get_aemutex(1681,38367
+void HCNF_get_eemutex(1808,41231
+void HCNF_get_tvalue(2049,47133
+ExpNode *HCNF_get_exp(HCNF_get_exp2155,48594
+
+inst_easy.c,849
+void build_easy_action_templates(59,1276
+void cleanup_easy_domain(161,3248
+Bool identical_fact(297,6744
+void handle_empty_easy_parameters(325,7215
+void encode_easy_unaries_as_types(407,8348
+int create_intersected_type(550,12008
+int find_intersected_type(620,13888
+int linertia_conds[linertia_conds682,14485
+int lnum_inertia_conds;683,14515
+int lmultiply_parameters[lmultiply_parameters685,14540
+int lnum_multiply_parameters;686,14576
+NormOperator *lo;lo688,14607
+NormEffect *le;le689,14625
+NormEffect *lres;lres691,14642
+void multiply_easy_effect_parameters(698,14666
+void unify_easy_inertia_conditions(762,16093
+void multiply_easy_non_constrained_effect_parameters(817,17318
+void multiply_easy_op_parameters(1005,21771
+void unify_easy_inertia_preconds(1075,23342
+void multiply_easy_non_constrained_op_parameters(1137,24865
+
+inst_final.c,1081
+int_pointer lpos[lpos79,1426
+int_pointer lneg[lneg80,1460
+int_pointer luse[luse81,1494
+int_pointer lindex[lindex82,1528
+int lp;84,1565
+int largs[largs85,1573
+int_pointer lf_def[lf_def91,1641
+int_pointer lf_index[lf_index92,1676
+int lf;94,1714
+int lf_args[lf_args95,1722
+void perform_reachability_analysis(102,1751
+int fact_adress(361,8604
+int fluent_adress(378,8771
+void make_name_inst_table_from_NormOperator(395,8944
+void make_name_inst_table_from_PseudoAction(423,9594
+int lnum_effects;466,10055
+void collect_relevant_facts_and_fluents(476,10082
+void create_final_goal_state(785,19880
+Bool set_relevants_in_wff(956,25576
+Bool set_relevants_in_exp(1011,26579
+void create_final_initial_state(1136,30084
+void create_final_actions(1182,31074
+void instantiate_exp_by_action(1766,50954
+Bool occurs_in_pre_con_diffvarrhsexp_goal(1889,54491
+Bool occurs_in_wff(2044,57768
+Bool occurs_in_exp(2080,58315
+void collect_relevant_constraints_and_psis(2176,59474
+int collect_constraint(2335,64212
+int collect_psi(2365,64866
+Bool same_expression(2418,65822
+
+inst_hard.c,864
+int linst_table[linst_table64,1315
+int_pointer lini[lini65,1342
+void build_hard_action_templates(74,1384
+void cleanup_hard_domain(167,3172
+Bool var_used_in_literals(244,4694
+Bool var_used_in_numeric_effects(265,4968
+void decrement_inferior_vars_in_literals(289,5339
+void decrement_inferior_vars_in_numeric_effects(311,5675
+void multiply_hard_op_parameters(362,6211
+void create_hard_mixed_operators(382,6482
+Effect *instantiate_Effect(instantiate_Effect590,13129
+WffNode *instantiate_wff(instantiate_wff665,14939
+void instantiate_exp(817,18029
+Bool full_possibly_positive(938,21293
+Bool full_possibly_negative(960,21540
+int instantiated_fact_adress(982,21789
+void multiply_hard_effect_parameters(1028,22183
+void create_hard_pseudo_effects(1058,22796
+void make_instantiate_literals(1242,28859
+void make_instantiate_numeric_effects(1282,29811
+
+inst_pre.c,2104
+char *lvar_names[lvar_names92,2026
+int lvar_types[lvar_types93,2054
+void print_comparator(103,2089
+void print_efftype(132,2441
+Bool number_comparison_holds(161,2820
+void encode_domain_in_integers(196,3368
+void collect_all_strings(270,5237
+int position_in_types_table(422,10062
+int position_in_constants_table(443,10360
+int position_in_predicates_table(462,10608
+int position_in_functions_table(481,10865
+void create_integer_representation(500,11113
+void make_Fact(648,15471
+void make_Fluent(719,17457
+Bool is_subtype(791,19422
+WffNode *make_Wff(make_Wff809,19615
+ExpNode *make_ExpNode(make_ExpNode888,21625
+Effect *make_effect(make_effect930,22382
+void do_inertia_preprocessing_step_1(1061,26014
+void collect_inertia_information(1147,28230
+void split_initial_state(1183,28907
+void normalize_all_wffs(1342,33147
+void remove_unused_vars_in_wff(1416,34990
+Bool var_used_in_wff(1476,36322
+Bool var_used_in_exp(1529,37271
+void decrement_inferior_vars(1578,38184
+void decrement_inferior_vars_in_exp(1627,39076
+void simplify_wff(1672,39957
+void simplify_exp(1878,44510
+void expand_quantifiers_in_wff(1999,47764
+void replace_var_with_const_in_exp(2131,50797
+WffNode *copy_Wff(copy_Wff2257,54545
+ExpNode *copy_Exp(copy_Exp2315,55607
+Bool possibly_positive(2364,56534
+Bool possibly_negative(2386,56822
+Bool matches(2414,57219
+void cleanup_wff(2435,57469
+void detect_tautologies_in_wff(2449,57668
+Bool are_identical_ATOMs(2517,58991
+void merge_ANDs_and_ORs_in_wff(2544,59385
+void NOTs_down_in_wff(2612,60512
+int lconsts[lconsts2749,63298
+void translate_negative_preconds(2758,63330
+Bool translate_one_negative_cond(2834,65124
+void replace_not_p_with_n_in_wff(2941,67642
+void add_to_initial_state(2983,68440
+void split_domain(3061,69876
+int is_dnf(3241,76339
+void make_normal_effects(3292,77207
+WffNode *lhitting_sets;lhitting_sets3631,90031
+WffNode_pointer *lset;lset3632,90055
+int lmax_set;3633,90078
+void dnf(3640,90098
+void ANDs_below_ORs_in_wff(3659,90389
+void collect_hitting_sets(3729,91929
+void merge_next_step_ANDs_and_ORs_in_wff(3769,92672
+
+main.c,5574
+float gtempl_time 95,1643
+float gRPG_time 96,1700
+struct _command_line gcmd_line;101,1784
+int gevaluated_states 105,1874
+int gmax_search_depth 109,1947
+int gbracket_count;127,2090
+char *gproblem_name;gproblem_name128,2110
+int lineno 132,2169
+char *gact_filename;gact_filename136,2220
+char *gdomain_name gdomain_name140,2270
+PlOperator *gloaded_ops gloaded_ops144,2338
+PlNode *gorig_initial_facts gorig_initial_facts148,2408
+PlNode *gorig_goal_facts gorig_goal_facts152,2484
+PlOperator *gloaded_axioms gloaded_axioms156,2572
+TypedList *gparse_types gparse_types160,2656
+TypedList *gparse_constants gparse_constants164,2737
+TypedListList *gparse_predicates gparse_predicates168,2847
+TypedListList *gparse_functions gparse_functions172,2961
+TypedList *gparse_objects gparse_objects176,3051
+Token gparse_optimization;180,3104
+ParseExpNode *gparse_metric gparse_metric181,3131
+FactList *gorig_constant_list gorig_constant_list189,3261
+FactList *gpredicates_and_types gpredicates_and_types193,3338
+FactList *gfunctions_and_types gfunctions_and_types197,3416
+Token gconstants[gconstants228,3744
+int gnum_constants 229,3777
+Token gtype_names[gtype_names230,3801
+int gtype_consts[gtype_consts231,3831
+Bool gis_member[gis_member232,3870
+int gtype_size[gtype_size233,3913
+int gnum_types 234,3940
+Token gpredicates[gpredicates235,3960
+int garity[garity236,3995
+int gpredicates_args_type[gpredicates_args_type237,4023
+int gnum_predicates 238,4077
+Token gfunctions[gfunctions239,4102
+int gf_arity[gf_arity240,4135
+int gfunctions_args_type[gfunctions_args_type241,4164
+int gnum_functions 242,4216
+Operator_pointer goperators[goperators250,4296
+int gnum_operators 251,4340
+Fact *gfull_initial;gfull_initial252,4364
+int gnum_full_initial 253,4385
+FluentValue *gfull_fluents_initial;gfull_fluents_initial254,4412
+int gnum_full_fluents_initial 255,4448
+WffNode *ggoal ggoal256,4483
+ExpNode *gmetric gmetric258,4507
+Bool gis_added[gis_added265,4653
+Bool gis_deleted[gis_deleted266,4685
+Bool gis_changed[gis_changed278,5101
+Facts *ginitial ginitial287,5313
+int gnum_initial 288,5337
+Fact **ginitial_predicate;ginitial_predicate289,5359
+int *gnum_initial_predicate;gnum_initial_predicate290,5386
+FluentValues *gf_initial;gf_initial294,5448
+int gnum_f_initial 295,5474
+FluentValue **ginitial_function;ginitial_function296,5498
+int *gnum_initial_function;gnum_initial_function297,5531
+int gtype_to_predicate[gtype_to_predicate303,5621
+int gpredicate_to_type[gpredicate_to_type304,5661
+TypeArray gintersected_types[gintersected_types308,5764
+int gnum_intersected_types[gnum_intersected_types309,5805
+Operator_pointer *ghard_operators;ghard_operators315,5887
+int gnum_hard_operators;316,5922
+NormOperator_pointer *geasy_operators;geasy_operators317,5947
+int gnum_easy_operators;318,5986
+EasyTemplate *geasy_templates;geasy_templates325,6111
+int gnum_easy_templates;326,6142
+MixedOperator *ghard_mixed_operators;ghard_mixed_operators333,6281
+int gnum_hard_mixed_operators;334,6319
+PseudoAction_pointer *ghard_templates;ghard_templates340,6396
+int gnum_hard_templates;341,6435
+Fact grelevant_facts[grelevant_facts348,6504
+int gnum_relevant_facts 349,6546
+int gnum_pp_facts 350,6575
+Fluent grelevant_fluents[grelevant_fluents353,6634
+int gnum_relevant_fluents 354,6682
+Token grelevant_fluents_name[grelevant_fluents_name355,6713
+ExpNode_pointer grelevant_constraints_lhs[grelevant_constraints_lhs368,7186
+Comparator grelevant_constraints_comp[grelevant_constraints_comp369,7255
+ExpNode_pointer grelevant_constraints_rhs[grelevant_constraints_rhs370,7320
+int gnum_relevant_constraints 371,7389
+Psi_pointer grelevant_psis[grelevant_psis373,7425
+int gnum_relevant_psis 374,7472
+Action *gactions gactions381,7556
+int gnum_actions;382,7581
+int gnum_effects 383,7599
+State ginitial_state;384,7673
+int *glogic_goal glogic_goal385,7695
+int gnum_logic_goal 386,7720
+Comparator *gnumeric_goal_comp gnumeric_goal_comp387,7745
+ExpNode_pointer *gnumeric_goal_lh gnumeric_goal_lh388,7784
+int gnum_numeric_goal 389,7852
+int *ggoal_constraint_id;ggoal_constraint_id392,7917
+int ggoal_psi_id;395,7981
+Comparator *gnumeric_goal_direct_comp;gnumeric_goal_direct_comp399,8034
+float *gnumeric_goal_direct_c;gnumeric_goal_direct_c400,8073
+Action *gtrash_actions gtrash_actions408,8287
+RPGlayer *gRPG;gRPG414,8337
+CNF *gCNF,gCNF423,8466
+CNF *gCNF, *gCNFend;gCNFend423,8466
+int gCNFnumvars,426,8542
+int gCNFnumvars, gCNFnumclauses;426,8542
+CNF *gCNFtrash,gCNFtrash433,8724
+CNF *gCNFtrash, *gCNFtrashend;gCNFtrashend433,8724
+HCNF *gHCNF,gHCNF444,8877
+HCNF *gHCNF, *gHCNFend;gHCNFend444,8877
+int gHCNFnumvars,447,8956
+int gHCNFnumvars, gHCNFnumclauses;447,8956
+HCNF *gHCNFtrash,gHCNFtrash454,9140
+HCNF *gHCNFtrash, *gHCNFtrashend;gHCNFtrashend454,9140
+RPGvaluetuple *gget_valuetuples_result;gget_valuetuples_result469,9418
+int gget_valuetuples_num_result;470,9458
+RPGvaluetuple *gget_valuetuples_exp_result_vt;gget_valuetuples_exp_result_vt483,9859
+RPGvalue *gget_valuetuples_exp_result_v;gget_valuetuples_exp_result_v484,9906
+int gget_valuetuples_exp_num_result;485,9947
+struct tms gTstart,493,10009
+struct tms gTstart, gTend;493,10009
+struct tms lstart,541,10449
+struct tms lstart, lend;541,10449
+Bool lfound_plan;545,10477
+int main(548,10497
+char *mutex2ignore[mutex2ignore1102,23119
+void load_mutex2ignore_file(1104,23155
+void output_planner_info(1132,23832
+void ff_usage(1194,25587
+Bool process_command_line(1255,28081
+
+memory.c,2496
+char *new_Token(new_Token75,1338
+TokenList *new_TokenList(new_TokenList88,1464
+FactList *new_FactList(new_FactList104,1666
+TypedList *new_TypedList(new_TypedList120,1863
+TypedListList *new_TypedListList(new_TypedListList137,2083
+ParseExpNode *new_ParseExpNode(new_ParseExpNode153,2310
+PlNode *new_PlNode(new_PlNode171,2593
+PlOperator *new_PlOperator(new_PlOperator195,2922
+PlOperator *new_axiom_op_list(new_axiom_op_list222,3390
+Fact *new_Fact(new_Fact273,3887
+Fluent *new_Fluent(new_Fluent286,4016
+FluentValue *new_FluentValue(new_FluentValue299,4155
+Facts *new_Facts(new_Facts312,4319
+FluentValues *new_FluentValues(new_FluentValues329,4507
+ExpNode *new_ExpNode(new_ExpNode344,4700
+WffNode *new_WffNode(new_WffNode366,5040
+Literal *new_Literal(new_Literal400,5525
+NumericEffect *new_NumericEffect(new_NumericEffect416,5718
+Effect *new_Effect(new_Effect434,5963
+Operator *new_Operator(new_Operator457,6265
+NormEffect *new_NormEffect1(new_NormEffect1493,6832
+NormEffect *new_NormEffect2(new_NormEffect2535,7678
+NormOperator *new_NormOperator(new_NormOperator608,10521
+EasyTemplate *new_EasyTemplate(new_EasyTemplate643,11161
+MixedOperator *new_MixedOperator(new_MixedOperator661,11409
+PseudoActionEffect *new_PseudoActionEffect(new_PseudoActionEffect681,11700
+PseudoAction *new_PseudoAction(new_PseudoAction715,12397
+Action *new_Action(new_Action746,13095
+void make_state(764,13323
+Psi *new_Psi(new_Psi826,13854
+RPGfact *new_RPGfact(new_RPGfact839,13978
+RPGaction *new_RPGaction(new_RPGaction859,14213
+RPGeffect *new_RPGeffect(new_RPGeffect881,14479
+RPGvalue *new_RPGvalue(new_RPGvalue899,14703
+RPGvaluetuple *new_RPGvaluetuple(new_RPGvaluetuple920,15039
+RPGlayer *new_RPGlayer(new_RPGlayer950,15677
+RPGeffectlist *new_RPGeffectlist(new_RPGeffectlist979,16123
+RPGactionlist *new_RPGactionlist(new_RPGactionlist997,16365
+CNF *new_CNF(new_CNF1015,16607
+HCNF *new_HCNF(new_HCNF1034,16826
+void free_TokenList(1109,17449
+void free_FactList(1125,17638
+void free_ParseExpNode(1139,17800
+void free_PlNode(1154,17990
+void free_PlOperator(1171,18239
+void free_Operator(1193,18503
+void free_ExpNode(1213,18748
+void free_WffNode(1229,18955
+void free_NormEffect(1250,19263
+void free_partial_Effect(1303,20324
+void free_NormOperator(1319,20477
+void free_single_NormEffect(1352,21068
+void free_single_EasyTemplate(1403,22103
+void free_TypedList(1415,22194
+void free_TypedListList(1437,22458
+void free_CNF(1459,22749
+
+output.c,650
+void print_FactList(56,1189
+void print_hidden_TokenList(102,2027
+void print_indent(125,2333
+void print_ParseExpNode(138,2432
+void print_PlNode(191,3425
+void print_plops(333,6468
+void print_ExpNode(362,7075
+void print_Wff(422,8119
+void print_Operator(537,10444
+void print_NormOperator(609,12093
+void print_MixedOperator(746,15293
+void print_PseudoAction(846,17505
+void print_Action(970,20263
+void print_psi_Action(1099,23125
+void print_Action_name(1125,23614
+void print_type(1145,23906
+void print_Fact(1177,24599
+void print_Fluent(1231,25536
+void print_ft_name(1252,25852
+void print_fl_name(1262,25937
+void print_State(1281,26178
+
+parse.c,702
+char *copy_Token(copy_Token64,1263
+TokenList *copy_TokenList(copy_TokenList77,1372
+void strupcase(100,1727
+char *rmdash(rmdash116,1880
+Token ltype_names[ltype_names146,2031
+int lnum_types;147,2061
+int leither_ty[leither_ty150,2079
+int lnum_either_ty[lnum_either_ty151,2117
+void build_orig_constant_list(157,2153
+void collect_type_names_in_pl(620,15581
+int get_type(684,16723
+void make_either_ty(700,16885
+void make_either_ty_in_pl(718,17123
+void normalize_tyl_in_pl(762,17778
+Bool make_adl_domain(884,20354
+Bool make_conjunction_of_atoms(954,22074
+Bool is_wff(1027,23285
+Bool make_effects(1085,24130
+Bool is_eff_literal(1221,26971
+Bool make_conjunction_of_literals(1260,27455
+
+RPG.c,567
+RPGlayer *RPG_initialize(RPG_initialize102,1614
+RPGlayer *RPG_extend(RPG_extend195,3687
+Bool RPG_satisfiesgoal(455,10165
+void RPG_print(499,11024
+void RPG_PV_statistics(749,16370
+void RPG_AE_statistics(824,17938
+Bool RPG_a_applicable(901,18472
+Bool RPG_e_applicable(945,19369
+Bool RPG_P_contains(989,20292
+void RPG_get_constraint_valuetuples(1054,20909
+void RPG_get_psi_valuetuples(1148,23011
+void RPG_insert_effect(1214,24355
+void RPG_get_connectivity(1414,28271
+void RPG_get_connectivity_a_exp(1564,33395
+void RPG_get_connectivity_e_exp(1621,34589
+
+RPGvaluetuples.c,419
+#define RPG_MAXRECDEPTH 97,1539
+RPGvaluetuple_pointer lrecd_VT[lrecd_VT103,1593
+RPGvalue_pointer lrecd_V[lrecd_V104,1674
+int lnum_recd[lnum_recd105,1717
+RPGvaluetuple_pointer lrecd_lhs_VT[lrecd_lhs_VT111,1798
+RPGvalue_pointer lrecd_lhs_V[lrecd_lhs_V112,1851
+int lnum_recd_lhs[lnum_recd_lhs113,1898
+void RPG_get_valuetuples(203,3594
+void RPG_get_valuetuples_exp(589,13008
+void RPG_get_VT_and_V(907,20410
+
+CNF.h,23
+#define _CNF_H45,1146
+
+HCNF.h,24
+#define _HCNF_H45,1149
+
+inst_easy.h,29
+#define _INST_EASY_H45,1178
+
+inst_final.h,30
+#define _INST_FINAL_H43,1188
+
+inst_hard.h,29
+#define _INST_HARD_H45,1178
+
+inst_pre.h,28
+#define _INST_PRE_H60,1768
+
+memory.h,26
+#define _MEMORY_H36,1189
+
+num2sat.h,5460
+#define __NUM2SAT_H38,1224
+#define SAME 84,1670
+#define HIDDEN_STR 108,1797
+#define AXIOM_STR 109,1820
+#define NAME_STR 110,1846
+#define VARIABLE_STR 111,1872
+#define STANDARD_TYPE 112,1906
+#define EITHER_STR 113,1939
+#define MAX_LENGTH 135,2100
+#define CONNECTOR 140,2171
+#define MAX_PSI_EXPRESSIONS 145,2247
+#define MAX_PSI_CONSTRAINTS 149,2332
+#define MAX_CONSTANTS 169,2459
+#define MAX_PREDICATES 170,2486
+#define MAX_FUNCTIONS 171,2513
+#define MAX_TYPES 172,2538
+#define MAX_ARITY 173,2559
+#define MAX_VARS 174,2579
+#define MAX_TYPE 177,2601
+#define MAX_OPERATORS 180,2625
+#define MAX_HITTING_SET_DEFAULT 189,2852
+#define MAX_TYPE_INTERSECTIONS 192,2891
+#define MAX_RELEVANT_FACTS 195,2927
+#define MAX_RELEVANT_FLUENTS 196,2961
+#define MAX_RELEVANT_CONSTRAINTS 197,2997
+#define MAX_RELEVANT_PSIS 198,3036
+#define MAX_STATE 218,3216
+#define MAX_PLAN_LENGTH 221,3241
+#define INFINITY 245,3464
+typedef unsigned char Bool;257,3563
+#define TRUE 259,3651
+#define FALSE 260,3666
+#define ENCODE_VAR(267,3785
+#define DECODE_VAR(268,3828
+#define GET_CONSTANT(270,3872
+#define CHECK_PTR(275,4001
+#define TIME(282,4200
+#define TIMECHECK 287,4331
+struct _command_line 326,4848
+typedef char *Token;Token353,5200
+typedef struct _TokenList 381,5308
+} TokenList;386,5379
+typedef struct _FactList 392,5423
+} FactList;397,5497
+typedef struct _TypedList 404,5610
+} TypedList;420,5962
+typedef struct _TypedListList 427,6053
+} TypedListList;435,6158
+typedef enum _ExpConnective{_ExpConnective439,6178
+typedef enum _ExpConnective{FHEAD FHEAD439,6178
+			    NUMBER,440,6220
+			    MINUS,441,6235
+			    AD,442,6249
+                            SU,443,6260
+			    MU,444,6293
+			    DI}DI445,6305
+			    DI} ExpConnective;445,6305
+typedef struct _ParseExpNode 449,6334
+} ParseExpNode;464,6726
+typedef enum _Connective{_Connective471,6865
+typedef enum _Connective{TRU TRU471,6865
+			 FAL,472,6902
+			 ATOM,473,6911
+			 COMP,474,6921
+			 NEF,475,6931
+			 NOT,476,6940
+			 AND,477,6950
+			 OR,478,6960
+			 ALL,479,6969
+			 EX,480,6979
+			 WHEN}WHEN481,6988
+			 WHEN} Connective;481,6988
+typedef enum _Comparator{_Comparator485,7013
+typedef enum _Comparator{IGUAL IGUAL485,7013
+			 LE,486,7108
+			 LEQ,487,7116
+			 EQ,488,7125
+			 GEQ,489,7133
+			 GE}GE490,7142
+			 GE} Comparator;490,7142
+typedef enum _NumericEffectType{_NumericEffectType495,7166
+typedef enum _NumericEffectType{ASSIGN ASSIGN495,7166
+				SCALE_UP,496,7213
+				SCALE_DOWN,497,7227
+				INCREASE,498,7243
+				DECREASE}DECREASE499,7257
+				DECREASE} NumericEffectType;499,7257
+typedef struct _PlNode 507,7351
+} PlNode;541,8224
+typedef struct _PlOperator 547,8293
+} PlOperator;569,8795
+typedef int TypeArray[TypeArray600,8908
+typedef int *int_pointer;int_pointer602,8956
+typedef struct _Fact 610,9041
+} Fact;614,9100
+typedef struct _Fluent 618,9111
+} Fluent;622,9171
+typedef struct _FluentValue 626,9184
+} FluentValue;631,9248
+typedef struct _Facts 635,9266
+} Facts;641,9330
+typedef struct _FluentValues 645,9342
+} FluentValues;652,9438
+typedef struct _ExpNode 656,9457
+} ExpNode, *ExpNode_pointer;ExpNode_pointer690,10132
+typedef struct _WffNode 694,10164
+} WffNode, *WffNode_pointer;WffNode_pointer734,10764
+typedef struct _Literal 738,10796
+} Literal;747,10905
+typedef struct _NumericEffect 751,10919
+} NumericEffect;761,11075
+typedef struct _Effect 765,11095
+} Effect;778,11316
+typedef struct _Operator 782,11329
+} Operator, *Operator_pointer;Operator_pointer796,11545
+typedef struct _NormEffect 810,11659
+} NormEffect;840,12442
+typedef struct _NormOperator 844,12459
+} NormOperator, *NormOperator_pointer;NormOperator_pointer864,12934
+typedef struct _EasyTemplate 871,13073
+} EasyTemplate;879,13215
+typedef struct _MixedOperator 897,13398
+} MixedOperator;915,13743
+typedef struct _PseudoActionEffect 925,13867
+} PseudoActionEffect;949,14369
+typedef struct _PseudoAction 953,14394
+} PseudoAction, *PseudoAction_pointer;PseudoAction_pointer970,14735
+typedef struct _ActionEffect 974,14777
+} ActionEffect;1028,16243
+typedef struct _Action 1032,16262
+} Action;1074,17161
+typedef struct _State 1088,17257
+} State, *State_pointer;State_pointer1096,17336
+typedef struct _Psi 1124,17578
+} Psi, *Psi_pointer;Psi_pointer1131,17705
+typedef struct _RPGfact RPGfact;1137,17755
+typedef struct _RPGvalue RPGvalue,1138,17788
+typedef struct _RPGvalue RPGvalue, *RPGvalue_pointer;RPGvalue_pointer1138,17788
+typedef struct _RPGvaluetuple RPGvaluetuple,1139,17842
+typedef struct _RPGvaluetuple RPGvaluetuple, *RPGvaluetuple_pointer;RPGvaluetuple_pointer1139,17842
+typedef struct _RPGaction RPGaction;1140,17911
+typedef struct _RPGeffect RPGeffect;1141,17948
+typedef struct _RPGlayer RPGlayer;1142,17985
+typedef struct _RPGactionlist RPGactionlist,1148,18080
+typedef struct _RPGactionlist RPGactionlist, *RPGactionlist_pointer;RPGactionlist_pointer1148,18080
+typedef struct _RPGeffectlist RPGeffectlist,1149,18149
+typedef struct _RPGeffectlist RPGeffectlist, *RPGeffectlist_pointer;RPGeffectlist_pointer1149,18149
+struct _RPGfact 1155,18223
+struct _RPGaction 1187,19004
+struct _RPGeffect 1212,19413
+struct _RPGvalue 1234,19791
+struct _RPGvaluetuple 1259,20451
+struct _RPGlayer 1277,20738
+struct _RPGactionlist 1380,23615
+struct _RPGeffectlist 1391,23726
+typedef struct _CNF 1426,24127
+} CNF;1435,24233
+typedef struct _HCNF 1446,24513
+} HCNF;1460,24706
+
+output.h,26
+#define _OUTPUT_H39,1138
+
+parse.h,25
+#define _PARSE_H37,1173
+
+RPG.h,23
+#define _RPG_H45,1165
+
+RPGvaluetuples.h,35
+#define _RPG_VALUETUPLES_H45,1188
+
+lex.fct_pddl.c,6239
+#define  YY_INT_ALIGNED 4,27
+#define yy_create_buffer 8,105
+#define yy_delete_buffer 9,153
+#define yy_flex_debug 10,201
+#define yy_init_buffer 11,243
+#define yy_flush_buffer 12,287
+#define yy_load_buffer_state 13,333
+#define yy_switch_to_buffer 14,389
+#define yyin 15,443
+#define yyleng 16,467
+#define yylex 17,495
+#define yylineno 18,521
+#define yyout 19,553
+#define yyrestart 20,579
+#define yytext 21,613
+#define yywrap 22,641
+#define yyalloc 23,669
+#define yyrealloc 24,699
+#define yyfree 25,733
+#define FLEX_SCANNER27,762
+#define YY_FLEX_MAJOR_VERSION 28,783
+#define YY_FLEX_MINOR_VERSION 29,815
+#define YY_FLEX_SUBMINOR_VERSION 30,847
+#define FLEX_BETA32,916
+#define FLEXINT_H48,1214
+#define __STDC_LIMIT_MACROS 58,1525
+typedef int8_t flex_int8_t;62,1585
+typedef uint8_t flex_uint8_t;63,1613
+typedef int16_t flex_int16_t;64,1643
+typedef uint16_t flex_uint16_t;65,1673
+typedef int32_t flex_int32_t;66,1705
+typedef uint32_t flex_uint32_t;67,1735
+typedef signed char flex_int8_t;69,1773
+typedef short int flex_int16_t;70,1806
+typedef int flex_int32_t;71,1838
+typedef unsigned char flex_uint8_t;72,1864
+typedef unsigned short int flex_uint16_t;73,1901
+typedef unsigned int flex_uint32_t;74,1943
+#define INT8_MIN 78,2029
+#define INT16_MIN 81,2092
+#define INT32_MIN 84,2159
+#define INT8_MAX 87,2230
+#define INT16_MAX 90,2292
+#define INT32_MAX 93,2356
+#define UINT8_MAX 96,2425
+#define UINT16_MAX 99,2489
+#define UINT32_MAX 102,2555
+#define YY_USE_CONST112,2725
+#define YY_USE_CONST119,2846
+#define yyconst 125,2948
+#define yyconst127,2976
+#define YY_NULL 131,3033
+#define YY_SC_TO_UI(138,3280
+#define BEGIN 144,3511
+#define YY_START 150,3710
+#define YYSTATE 151,3750
+#define YY_STATE_EOF(154,3833
+#define YY_NEW_FILE 157,3953
+#define YY_END_OF_BUFFER_CHAR 159,4004
+#define YY_BUF_SIZE 163,4093
+#define YY_STATE_BUF_SIZE 168,4221
+#define YY_TYPEDEF_YY_BUFFER_STATE171,4329
+typedef struct yy_buffer_state *YY_BUFFER_STATE;YY_BUFFER_STATE172,4364
+#define EOB_ACT_CONTINUE_SCAN 179,4487
+#define EOB_ACT_END_OF_FILE 180,4519
+#define EOB_ACT_LAST_MATCH 181,4549
+    #define YY_LESS_LINENO(183,4579
+#define yyless(186,4694
+#define unput(199,5061
+#define YY_TYPEDEF_YY_SIZE_T202,5136
+typedef size_t yy_size_t;203,5165
+#define YY_STRUCT_YY_BUFFER_STATE207,5233
+struct yy_buffer_state208,5267
+#define YY_BUFFER_NEW 254,6418
+#define YY_BUFFER_NORMAL 255,6442
+#define YY_BUFFER_EOF_PENDING 266,6952
+static size_t yy_buffer_stack_top 272,7060
+static size_t yy_buffer_stack_max 273,7130
+static YY_BUFFER_STATE * yy_buffer_stack 274,7196
+#define YY_CURRENT_BUFFER 282,7464
+#define YY_CURRENT_BUFFER_LVALUE 289,7760
+static char yy_hold_char;292,7908
+static int yy_n_chars;293,7934
+int fct_pddlleng;294,8005
+static char *yy_c_buf_p yy_c_buf_p297,8069
+static int yy_init 298,8107
+static int yy_start 299,8168
+static int yy_did_buffer_switch_on_eof;304,8359
+#define YY_FLUSH_BUFFER 318,8939
+#define yy_new_buffer 328,9317
+#define yy_set_interactive(330,9363
+#define yy_set_bol(340,9657
+#define YY_AT_BOL(350,9918
+typedef unsigned char YY_CHAR;354,10001
+FILE *fct_pddlin fct_pddlin356,10033
+typedef int yy_state_type;358,10092
+int fct_pddllineno 362,10148
+#define yytext_ptr 365,10200
+#define YY_DO_BEFORE_ACTION 375,10565
+#define YY_NUM_RULES 382,10734
+#define YY_END_OF_BUFFER 383,10758
+struct yy_trans_info386,10867
+static yyconst flex_int16_t yy_accept[yy_accept391,10942
+static yyconst flex_int32_t yy_ec[yy_ec415,12194
+static yyconst flex_int32_t yy_meta[yy_meta447,13916
+static yyconst flex_int16_t yy_base[yy_base456,14272
+static yyconst flex_int16_t yy_def[yy_def482,15582
+static yyconst flex_int16_t yy_nxt[yy_nxt508,16891
+static yyconst flex_int16_t yy_chk[yy_chk543,18785
+static yy_state_type yy_last_accepting_state;578,20679
+static char *yy_last_accepting_cpos;yy_last_accepting_cpos579,20725
+int fct_pddl_flex_debug 582,20795
+#define REJECT 587,20927
+#define yymore(588,20971
+#define YY_MORE_ADJ 589,21017
+#define YY_RESTORE_YY_MORE_OFFSET590,21039
+char *fct_pddltext;fct_pddltext591,21073
+#define INITIAL 605,21357
+#define COMMENT 606,21375
+#define OVERREAD 607,21393
+#define YY_EXTRA_TYPE 618,21696
+#define YY_READ_BUF_SIZE 686,23002
+#define ECHO 694,23220
+#define YY_INPUT(701,23448
+#define yyterminate(738,24392
+#define YY_START_STACK_INCR 743,24527
+#define YY_FATAL_ERROR(748,24617
+#define YY_DECL_IS_OURS 757,24850
+#define YY_DECL 761,24909
+#define YY_USER_ACTION768,25103
+#define YY_BREAK 773,25196
+#define YY_RULE_SETUP 776,25228
+static int yy_get_next_buffer 1258,35511
+    static yy_state_type yy_get_previous_state 1392,39124
+    static yy_state_type yy_try_NUL_trans 1424,40026
+    static void yyunput 1447,40698
+    static int yyinput 1486,41764
+    void fct_pddlrestart 1563,43549
+    void fct_pddl_switch_to_buffer 1580,43946
+static void fct_pddl_load_buffer_state 1611,44831
+    YY_BUFFER_STATE fct_pddl_create_buffer 1625,45316
+    void fct_pddl_delete_buffer 1653,46049
+    static void fct_pddl_init_buffer 1676,46598
+    void fct_pddl_flush_buffer 1704,47355
+void fct_pddlpush_buffer_state 1733,48053
+void fct_pddlpop_buffer_state 1763,48848
+static void fct_pddlensure_buffer_stack 1782,49261
+YY_BUFFER_STATE fct_pddl_scan_buffer 1831,50907
+YY_BUFFER_STATE fct_pddl_scan_string 1868,52016
+YY_BUFFER_STATE fct_pddl_scan_bytes 1881,52440
+#define YY_EXIT_FAILURE 1912,53193
+static void yy_fatal_error 1915,53227
+#undef yyless1923,53406
+#define yyless(1924,53420
+int fct_pddlget_lineno 1943,53909
+FILE *fct_pddlget_in fct_pddlget_in1952,54015
+FILE *fct_pddlget_out fct_pddlget_out1960,54111
+int fct_pddlget_leng 1968,54223
+char *fct_pddlget_text fct_pddlget_text1977,54322
+void fct_pddlset_lineno 1986,54450
+void fct_pddlset_in 1998,54693
+void fct_pddlset_out 2003,54766
+int fct_pddlget_debug 2008,54843
+void fct_pddlset_debug 2013,54914
+static int yy_init_globals 2018,54996
+int fct_pddllex_destroy 2047,55720
+static void yy_flex_strncpy 2073,56304
+static int yy_flex_strlen 2082,56465
+void *fct_pddlalloc fct_pddlalloc2092,56582
+void *fct_pddlrealloc fct_pddlrealloc2097,56659
+void fct_pddlfree 2109,57121
+#define YYTABLES_NAME 2114,57227
+
+lex-fct_pddl.l,74
+#define fct_pddlwrap(6,
+#define YY_SKIP_YYWRAP7,
+int gbracket_count 8,
+
+lex.ops_pddl.c,6239
+#define  YY_INT_ALIGNED 4,27
+#define yy_create_buffer 8,105
+#define yy_delete_buffer 9,153
+#define yy_flex_debug 10,201
+#define yy_init_buffer 11,243
+#define yy_flush_buffer 12,287
+#define yy_load_buffer_state 13,333
+#define yy_switch_to_buffer 14,389
+#define yyin 15,443
+#define yyleng 16,467
+#define yylex 17,495
+#define yylineno 18,521
+#define yyout 19,553
+#define yyrestart 20,579
+#define yytext 21,613
+#define yywrap 22,641
+#define yyalloc 23,669
+#define yyrealloc 24,699
+#define yyfree 25,733
+#define FLEX_SCANNER27,762
+#define YY_FLEX_MAJOR_VERSION 28,783
+#define YY_FLEX_MINOR_VERSION 29,815
+#define YY_FLEX_SUBMINOR_VERSION 30,847
+#define FLEX_BETA32,916
+#define FLEXINT_H48,1214
+#define __STDC_LIMIT_MACROS 58,1525
+typedef int8_t flex_int8_t;62,1585
+typedef uint8_t flex_uint8_t;63,1613
+typedef int16_t flex_int16_t;64,1643
+typedef uint16_t flex_uint16_t;65,1673
+typedef int32_t flex_int32_t;66,1705
+typedef uint32_t flex_uint32_t;67,1735
+typedef signed char flex_int8_t;69,1773
+typedef short int flex_int16_t;70,1806
+typedef int flex_int32_t;71,1838
+typedef unsigned char flex_uint8_t;72,1864
+typedef unsigned short int flex_uint16_t;73,1901
+typedef unsigned int flex_uint32_t;74,1943
+#define INT8_MIN 78,2029
+#define INT16_MIN 81,2092
+#define INT32_MIN 84,2159
+#define INT8_MAX 87,2230
+#define INT16_MAX 90,2292
+#define INT32_MAX 93,2356
+#define UINT8_MAX 96,2425
+#define UINT16_MAX 99,2489
+#define UINT32_MAX 102,2555
+#define YY_USE_CONST112,2725
+#define YY_USE_CONST119,2846
+#define yyconst 125,2948
+#define yyconst127,2976
+#define YY_NULL 131,3033
+#define YY_SC_TO_UI(138,3280
+#define BEGIN 144,3511
+#define YY_START 150,3710
+#define YYSTATE 151,3750
+#define YY_STATE_EOF(154,3833
+#define YY_NEW_FILE 157,3953
+#define YY_END_OF_BUFFER_CHAR 159,4004
+#define YY_BUF_SIZE 163,4093
+#define YY_STATE_BUF_SIZE 168,4221
+#define YY_TYPEDEF_YY_BUFFER_STATE171,4329
+typedef struct yy_buffer_state *YY_BUFFER_STATE;YY_BUFFER_STATE172,4364
+#define EOB_ACT_CONTINUE_SCAN 179,4487
+#define EOB_ACT_END_OF_FILE 180,4519
+#define EOB_ACT_LAST_MATCH 181,4549
+    #define YY_LESS_LINENO(183,4579
+#define yyless(186,4694
+#define unput(199,5061
+#define YY_TYPEDEF_YY_SIZE_T202,5136
+typedef size_t yy_size_t;203,5165
+#define YY_STRUCT_YY_BUFFER_STATE207,5233
+struct yy_buffer_state208,5267
+#define YY_BUFFER_NEW 254,6418
+#define YY_BUFFER_NORMAL 255,6442
+#define YY_BUFFER_EOF_PENDING 266,6952
+static size_t yy_buffer_stack_top 272,7060
+static size_t yy_buffer_stack_max 273,7130
+static YY_BUFFER_STATE * yy_buffer_stack 274,7196
+#define YY_CURRENT_BUFFER 282,7464
+#define YY_CURRENT_BUFFER_LVALUE 289,7760
+static char yy_hold_char;292,7908
+static int yy_n_chars;293,7934
+int ops_pddlleng;294,8005
+static char *yy_c_buf_p yy_c_buf_p297,8069
+static int yy_init 298,8107
+static int yy_start 299,8168
+static int yy_did_buffer_switch_on_eof;304,8359
+#define YY_FLUSH_BUFFER 318,8939
+#define yy_new_buffer 328,9317
+#define yy_set_interactive(330,9363
+#define yy_set_bol(340,9657
+#define YY_AT_BOL(350,9918
+typedef unsigned char YY_CHAR;354,10001
+FILE *ops_pddlin ops_pddlin356,10033
+typedef int yy_state_type;358,10092
+int ops_pddllineno 362,10148
+#define yytext_ptr 365,10200
+#define YY_DO_BEFORE_ACTION 375,10565
+#define YY_NUM_RULES 382,10734
+#define YY_END_OF_BUFFER 383,10758
+struct yy_trans_info386,10867
+static yyconst flex_int16_t yy_accept[yy_accept391,10942
+static yyconst flex_int32_t yy_ec[yy_ec419,12426
+static yyconst flex_int32_t yy_meta[yy_meta451,14148
+static yyconst flex_int16_t yy_base[yy_base460,14498
+static yyconst flex_int16_t yy_def[yy_def489,16039
+static yyconst flex_int16_t yy_nxt[yy_nxt518,17579
+static yyconst flex_int16_t yy_chk[yy_chk557,19675
+static yy_state_type yy_last_accepting_state;596,21771
+static char *yy_last_accepting_cpos;yy_last_accepting_cpos597,21817
+int ops_pddl_flex_debug 600,21887
+#define REJECT 605,22019
+#define yymore(606,22063
+#define YY_MORE_ADJ 607,22109
+#define YY_RESTORE_YY_MORE_OFFSET608,22131
+char *ops_pddltext;ops_pddltext609,22165
+#define INITIAL 622,22421
+#define COMMENT 623,22439
+#define OVERREAD 624,22457
+#define YY_EXTRA_TYPE 635,22760
+#define YY_READ_BUF_SIZE 703,24066
+#define ECHO 711,24284
+#define YY_INPUT(718,24512
+#define yyterminate(755,25456
+#define YY_START_STACK_INCR 760,25591
+#define YY_FATAL_ERROR(765,25681
+#define YY_DECL_IS_OURS 774,25914
+#define YY_DECL 778,25973
+#define YY_USER_ACTION785,26167
+#define YY_BREAK 790,26260
+#define YY_RULE_SETUP 793,26292
+static int yy_get_next_buffer 1301,37061
+    static yy_state_type yy_get_previous_state 1435,40674
+    static yy_state_type yy_try_NUL_trans 1467,41576
+    static void yyunput 1490,42248
+    static int yyinput 1529,43314
+    void ops_pddlrestart 1606,45099
+    void ops_pddl_switch_to_buffer 1623,45496
+static void ops_pddl_load_buffer_state 1654,46381
+    YY_BUFFER_STATE ops_pddl_create_buffer 1668,46866
+    void ops_pddl_delete_buffer 1696,47599
+    static void ops_pddl_init_buffer 1719,48148
+    void ops_pddl_flush_buffer 1747,48905
+void ops_pddlpush_buffer_state 1776,49603
+void ops_pddlpop_buffer_state 1806,50398
+static void ops_pddlensure_buffer_stack 1825,50811
+YY_BUFFER_STATE ops_pddl_scan_buffer 1874,52457
+YY_BUFFER_STATE ops_pddl_scan_string 1911,53566
+YY_BUFFER_STATE ops_pddl_scan_bytes 1924,53990
+#define YY_EXIT_FAILURE 1955,54743
+static void yy_fatal_error 1958,54777
+#undef yyless1966,54956
+#define yyless(1967,54970
+int ops_pddlget_lineno 1986,55459
+FILE *ops_pddlget_in ops_pddlget_in1995,55565
+FILE *ops_pddlget_out ops_pddlget_out2003,55661
+int ops_pddlget_leng 2011,55773
+char *ops_pddlget_text ops_pddlget_text2020,55872
+void ops_pddlset_lineno 2029,56000
+void ops_pddlset_in 2041,56243
+void ops_pddlset_out 2046,56316
+int ops_pddlget_debug 2051,56393
+void ops_pddlset_debug 2056,56464
+static int yy_init_globals 2061,56546
+int ops_pddllex_destroy 2090,57270
+static void yy_flex_strncpy 2116,57854
+static int yy_flex_strlen 2125,58015
+void *ops_pddlalloc ops_pddlalloc2135,58132
+void *ops_pddlrealloc ops_pddlrealloc2140,58209
+void ops_pddlfree 2152,58671
+#define YYTABLES_NAME 2157,58777
+
+lex-ops_pddl.l,51
+#define ops_pddlwrap(6,
+#define YY_SKIP_YYWRAP7,
+
+scan-fct_pddl.tab.c,5920
+#define YYBISON 47,2141
+#define YYBISON_VERSION 50,2182
+#define YYSKELETON_NAME 53,2235
+#define YYPURE 56,2290
+#define YYLSP_NEEDED 59,2332
+#define yyparse 62,2407
+#define yylex 63,2437
+#define yyerror 64,2465
+#define yylval 65,2495
+#define yychar 66,2524
+#define yydebug 67,2553
+#define yynerrs 68,2583
+# define YYTOKENTYPE73,2650
+   enum yytokentype 76,2774
+     DEFINE_TOK 77,2796
+     PROBLEM_TOK 78,2819
+     SITUATION_TOK 79,2843
+     BSITUATION_TOK 80,2869
+     OBJECTS_TOK 81,2896
+     BDOMAIN_TOK 82,2920
+     INIT_TOK 83,2944
+     GOAL_TOK 84,2965
+     METRIC_TOK 85,2986
+     AND_TOK 86,3009
+     NOT_TOK 87,3029
+     NAME 88,3049
+     VARIABLE 89,3066
+     NUM 90,3087
+     LE_TOK 91,3103
+     LEQ_TOK 92,3122
+     EQ_TOK 93,3142
+     GEQ_TOK 94,3161
+     GE_TOK 95,3181
+     MINUS_TOK 96,3200
+     AD_TOK 97,3222
+     MU_TOK 98,3241
+     DI_TOK 99,3260
+     FORALL_TOK 100,3279
+     IMPLY_TOK 101,3302
+     OR_TOK 102,3324
+     EXISTS_TOK 103,3343
+     EITHER_TOK 104,3366
+     OPEN_PAREN 105,3389
+     CLOSE_PAREN 106,3412
+#define DEFINE_TOK 110,3463
+#define PROBLEM_TOK 111,3486
+#define SITUATION_TOK 112,3510
+#define BSITUATION_TOK 113,3536
+#define OBJECTS_TOK 114,3563
+#define BDOMAIN_TOK 115,3587
+#define INIT_TOK 116,3611
+#define GOAL_TOK 117,3632
+#define METRIC_TOK 118,3653
+#define AND_TOK 119,3676
+#define NOT_TOK 120,3696
+#define NAME 121,3716
+#define VARIABLE 122,3733
+#define NUM 123,3754
+#define LE_TOK 124,3770
+#define LEQ_TOK 125,3789
+#define EQ_TOK 126,3809
+#define GEQ_TOK 127,3828
+#define GE_TOK 128,3848
+#define MINUS_TOK 129,3867
+#define AD_TOK 130,3889
+#define MU_TOK 131,3908
+#define DI_TOK 132,3927
+#define FORALL_TOK 133,3946
+#define IMPLY_TOK 134,3969
+#define OR_TOK 135,3991
+#define EXISTS_TOK 136,4010
+#define EITHER_TOK 137,4033
+#define OPEN_PAREN 138,4056
+#define CLOSE_PAREN 139,4079
+	YYSTYPE;270,7080
+# define yystype 271,7122
+# define YYSTYPE_IS_DECLARED 272,7184
+# define YYSTYPE_IS_TRIVIAL 273,7215
+# undef short285,7380
+typedef YYTYPE_UINT8 yytype_uint8;289,7422
+typedef unsigned char yytype_uint8;291,7463
+typedef YYTYPE_INT8 yytype_int8;295,7526
+typedef signed char yytype_int8;298,7659
+typedef short int yytype_int8;300,7698
+typedef YYTYPE_UINT16 yytype_uint16;304,7758
+typedef unsigned short int yytype_uint16;306,7801
+typedef YYTYPE_INT16 yytype_int16;310,7871
+typedef short int yytype_int16;312,7912
+#  define YYSIZE_T 317,7991
+#  define YYSIZE_T 319,8046
+#  define YYSIZE_T 323,8252
+#  define YYSIZE_T 325,8285
+#define YYSIZE_MAXIMUM 329,8333
+#   define YY_(335,8479
+#  define YY_(339,8565
+# define YYUSE(345,8702
+# define YYUSE(347,8739
+# define YYID(352,8869
+YYID 357,9005
+#    define YYSTACK_ALLOC 375,9277
+#    define YYSTACK_ALLOC 379,9440
+#    define alloca 382,9560
+#    define YYSTACK_ALLOC 384,9596
+#      define _STDLIB_H 389,9860
+#  define YYSTACK_FREE(398,10007
+#   define YYSTACK_ALLOC_MAXIMUM 404,10404
+#  define YYSTACK_ALLOC 407,10486
+#  define YYSTACK_FREE 408,10519
+#   define YYSTACK_ALLOC_MAXIMUM 410,10581
+#    define _STDLIB_H 417,10865
+#   define YYMALLOC 421,10927
+#   define YYFREE 428,11194
+union yyalloc443,11677
+# define YYSTACK_GAP_MAXIMUM 450,11811
+# define YYSTACK_BYTES(454,11959
+#   define YYCOPY(462,12219
+#   define YYCOPY(465,12326
+# define YYSTACK_RELOCATE(481,12817
+#define YYFINAL 495,13215
+#define YYLAST 497,13274
+#define YYNTOKENS 500,13337
+#define YYNNTS 502,13400
+#define YYNRULES 504,13455
+#define YYNSTATES 506,13513
+#define YYUNDEFTOK 509,13610
+#define YYMAXUTOK 510,13632
+#define YYTRANSLATE(512,13657
+static const yytype_uint8 yytranslate[yytranslate516,13833
+static const yytype_uint16 yyprhs[yyprhs552,16079
+static const yytype_int8 yyrhs[yyrhs565,16742
+static const yytype_uint16 yyrline[yyrline602,19125
+static const char *const yytname[yytname618,19923
+static const yytype_uint16 yytoknum[yytoknum639,20956
+static const yytype_uint8 yyr1[yyr1649,21319
+static const yytype_uint8 yyr2[yyr2662,21999
+static const yytype_uint8 yydefact[yydefact677,22774
+static const yytype_int16 yydefgoto[yydefgoto702,24265
+#define YYPACT_NINF 711,24614
+static const yytype_int16 yypact[yypact712,24639
+static const yytype_int16 yypgoto[yypgoto737,26126
+#define YYTABLE_NINF 748,26620
+static const yytype_uint8 yytable[yytable749,26644
+static const yytype_int16 yycheck[yycheck774,28178
+static const yytype_uint8 yystos[yystos801,29809
+#define yyerrok	825,31269
+#define yyclearin	826,31304
+#define YYEMPTY	827,31341
+#define YYEOF	828,31363
+#define YYACCEPT	830,31381
+#define YYABORT	831,31415
+#define YYERROR	832,31448
+#define YYFAIL	839,31686
+#define YYRECOVERING(841,31717
+#define YYBACKUP(843,31758
+#define YYTERROR	861,32186
+#define YYERRCODE	862,32205
+#define YYRHSLOC(869,32411
+# define YYLLOC_DEFAULT(871,32470
+#  define YY_LOCATION_PRINT(897,33383
+#  define YY_LOCATION_PRINT(902,33563
+# define YYLEX 910,33708
+# define YYLEX 912,33749
+#  define YYFPRINTF 920,33907
+# define YYDPRINTF(923,33944
+# define YY_SYMBOL_PRINT(929,34051
+yy_symbol_value_print 949,34593
+yy_symbol_print 981,35261
+yy_stack_print 1007,36107
+# define YY_STACK_PRINT(1021,36409
+yy_reduce_print 1035,36819
+# define YY_REDUCE_PRINT(1059,37419
+int yydebug;1067,37648
+# define YYDPRINTF(1069,37682
+# define YY_SYMBOL_PRINT(1070,37707
+# define YY_STACK_PRINT(1071,37762
+# define YY_REDUCE_PRINT(1072,37799
+# define YYINITDEPTH 1078,37933
+# define YYMAXDEPTH 1089,38289
+#   define yystrlen 1098,38410
+yystrlen 1104,38594
+#   define yystpcpy 1121,38889
+yystpcpy 1128,39125
+yytnamerr 1156,39866
+yysyntax_error 1203,40925
+      enum { YYERROR_VERBOSE_ARGS_MAXIMUM 1216,41273
+yydestruct 1313,44094
+int yychar;1356,44823
+YYSTYPE yylval;1359,44888
+int yynerrs;1362,44944
+yyparse 1374,45126
+#define YYPOPSTACK(1427,46279
+#  undef YYSTACK_RELOCATE1515,48696
+
+scan-fct_pddl.y,1189
+#define YYMAXDEPTH 14,
+#define SCAN_ERR19,
+#define DEFINE_EXPECTED 20,
+#define PROBLEM_EXPECTED 21,
+#define PROBNAME_EXPECTED 22,
+#define LBRACKET_EXPECTED 23,
+#define RBRACKET_EXPECTED 24,
+#define DOMDEFS_EXPECTED 25,
+#define REQUIREM_EXPECTED 26,
+#define TYPEDLIST_EXPECTED 27,
+#define DOMEXT_EXPECTED 28,
+#define DOMEXTNAME_EXPECTED 29,
+#define TYPEDEF_EXPECTED 30,
+#define CONSTLIST_EXPECTED 31,
+#define PREDDEF_EXPECTED 32,
+#define NAME_EXPECTED 33,
+#define VARIABLE_EXPECTED 34,
+#define ACTIONFUNCTOR_EXPECTED 35,
+#define ATOM_FORMULA_EXPECTED 36,
+#define EFFECT_DEF_EXPECTED 37,
+#define NEG_FORMULA_EXPECTED 38,
+#define NOT_SUPPORTED 39,
+#define SITUATION_EXPECTED 40,
+#define SITNAME_EXPECTED 41,
+#define BDOMAIN_EXPECTED 42,
+#define BADDOMAIN 43,
+#define INIFACTS 44,
+#define GOALDEF 45,
+#define ADLGOAL 46,
+static char * serrmsg[serrmsg50,
+static int sact_err;85,
+static char *sact_err_par sact_err_par86,
+static Bool sis_negated 87,
+# define YYDEBUG 93,
+# undef YYERROR_VERBOSE98,
+# define YYERROR_VERBOSE 99,
+# define YYERROR_VERBOSE 101,
+# define YYTOKEN_TABLE 106,
+typedef union YYSTYPE110,
+int yyerror(864,
+void load_fct_file(883,
+
+scan-ops_pddl.tab.c,6531
+#define YYBISON 47,2141
+#define YYBISON_VERSION 50,2182
+#define YYSKELETON_NAME 53,2235
+#define YYPURE 56,2290
+#define YYLSP_NEEDED 59,2332
+#define yyparse 62,2407
+#define yylex 63,2437
+#define yyerror 64,2465
+#define yylval 65,2495
+#define yychar 66,2524
+#define yydebug 67,2553
+#define yynerrs 68,2583
+# define YYTOKENTYPE73,2650
+   enum yytokentype 76,2774
+     DEFINE_TOK 77,2796
+     DOMAIN_TOK 78,2819
+     REQUIREMENTS_TOK 79,2842
+     TYPES_TOK 80,2871
+     EITHER_TOK 81,2893
+     CONSTANTS_TOK 82,2916
+     PREDICATES_TOK 83,2942
+     FUNCTIONS_TOK 84,2969
+     ACTION_TOK 85,2995
+     VARS_TOK 86,3018
+     IMPLIES_TOK 87,3039
+     PRECONDITION_TOK 88,3063
+     PARAMETERS_TOK 89,3092
+     EFFECT_TOK 90,3119
+     AND_TOK 91,3142
+     NOT_TOK 92,3162
+     WHEN_TOK 93,3182
+     FORALL_TOK 94,3203
+     IMPLY_TOK 95,3226
+     OR_TOK 96,3248
+     EXISTS_TOK 97,3267
+     LE_TOK 98,3290
+     LEQ_TOK 99,3309
+     EQ_TOK 100,3329
+     GEQ_TOK 101,3348
+     GE_TOK 102,3368
+     MINUS_TOK 103,3387
+     AD_TOK 104,3409
+     MU_TOK 105,3428
+     DI_TOK 106,3447
+     ASSIGN_TOK 107,3466
+     SCALE_UP_TOK 108,3489
+     SCALE_DOWN_TOK 109,3514
+     INCREASE_TOK 110,3541
+     DECREASE_TOK 111,3566
+     NAME 112,3591
+     VARIABLE 113,3608
+     NUM 114,3629
+     OPEN_PAREN 115,3645
+     CLOSE_PAREN 116,3668
+#define DEFINE_TOK 120,3719
+#define DOMAIN_TOK 121,3742
+#define REQUIREMENTS_TOK 122,3765
+#define TYPES_TOK 123,3794
+#define EITHER_TOK 124,3816
+#define CONSTANTS_TOK 125,3839
+#define PREDICATES_TOK 126,3865
+#define FUNCTIONS_TOK 127,3892
+#define ACTION_TOK 128,3918
+#define VARS_TOK 129,3941
+#define IMPLIES_TOK 130,3962
+#define PRECONDITION_TOK 131,3986
+#define PARAMETERS_TOK 132,4015
+#define EFFECT_TOK 133,4042
+#define AND_TOK 134,4065
+#define NOT_TOK 135,4085
+#define WHEN_TOK 136,4105
+#define FORALL_TOK 137,4126
+#define IMPLY_TOK 138,4149
+#define OR_TOK 139,4171
+#define EXISTS_TOK 140,4190
+#define LE_TOK 141,4213
+#define LEQ_TOK 142,4232
+#define EQ_TOK 143,4252
+#define GEQ_TOK 144,4271
+#define GE_TOK 145,4291
+#define MINUS_TOK 146,4310
+#define AD_TOK 147,4332
+#define MU_TOK 148,4351
+#define DI_TOK 149,4370
+#define ASSIGN_TOK 150,4389
+#define SCALE_UP_TOK 151,4412
+#define SCALE_DOWN_TOK 152,4437
+#define INCREASE_TOK 153,4464
+#define DECREASE_TOK 154,4489
+#define NAME 155,4514
+#define VARIABLE 156,4531
+#define NUM 157,4552
+#define OPEN_PAREN 158,4568
+#define CLOSE_PAREN 159,4591
+	YYSTYPE;306,7764
+# define yystype 307,7806
+# define YYSTYPE_IS_DECLARED 308,7868
+# define YYSTYPE_IS_TRIVIAL 309,7899
+# undef short321,8064
+typedef YYTYPE_UINT8 yytype_uint8;325,8106
+typedef unsigned char yytype_uint8;327,8147
+typedef YYTYPE_INT8 yytype_int8;331,8210
+typedef signed char yytype_int8;334,8343
+typedef short int yytype_int8;336,8382
+typedef YYTYPE_UINT16 yytype_uint16;340,8442
+typedef unsigned short int yytype_uint16;342,8485
+typedef YYTYPE_INT16 yytype_int16;346,8555
+typedef short int yytype_int16;348,8596
+#  define YYSIZE_T 353,8675
+#  define YYSIZE_T 355,8730
+#  define YYSIZE_T 359,8936
+#  define YYSIZE_T 361,8969
+#define YYSIZE_MAXIMUM 365,9017
+#   define YY_(371,9163
+#  define YY_(375,9249
+# define YYUSE(381,9386
+# define YYUSE(383,9423
+# define YYID(388,9553
+YYID 393,9689
+#    define YYSTACK_ALLOC 411,9961
+#    define YYSTACK_ALLOC 415,10124
+#    define alloca 418,10244
+#    define YYSTACK_ALLOC 420,10280
+#      define _STDLIB_H 425,10544
+#  define YYSTACK_FREE(434,10691
+#   define YYSTACK_ALLOC_MAXIMUM 440,11088
+#  define YYSTACK_ALLOC 443,11170
+#  define YYSTACK_FREE 444,11203
+#   define YYSTACK_ALLOC_MAXIMUM 446,11265
+#    define _STDLIB_H 453,11549
+#   define YYMALLOC 457,11611
+#   define YYFREE 464,11878
+union yyalloc479,12361
+# define YYSTACK_GAP_MAXIMUM 486,12495
+# define YYSTACK_BYTES(490,12643
+#   define YYCOPY(498,12903
+#   define YYCOPY(501,13010
+# define YYSTACK_RELOCATE(517,13501
+#define YYFINAL 531,13899
+#define YYLAST 533,13958
+#define YYNTOKENS 536,14021
+#define YYNNTS 538,14084
+#define YYNRULES 540,14139
+#define YYNSTATES 542,14197
+#define YYUNDEFTOK 545,14294
+#define YYMAXUTOK 546,14316
+#define YYTRANSLATE(548,14341
+static const yytype_uint8 yytranslate[yytranslate552,14517
+static const yytype_uint16 yyprhs[yyprhs589,16836
+static const yytype_int8 yyrhs[yyrhs604,17645
+static const yytype_uint16 yyrline[yyrline646,20421
+static const char *const yytname[yytname664,21365
+static const yytype_uint16 yytoknum[yytoknum690,22716
+static const yytype_uint8 yyr1[yyr1701,23152
+static const yytype_uint8 yyr2[yyr2716,23978
+static const yytype_uint8 yydefact[yydefact733,24899
+static const yytype_int16 yydefgoto[yydefgoto762,26696
+#define YYPACT_NINF 773,27156
+static const yytype_int16 yypact[yypact774,27181
+static const yytype_int16 yypgoto[yypgoto803,28974
+#define YYTABLE_NINF 816,29579
+static const yytype_uint8 yytable[yytable817,29603
+static const yytype_int16 yycheck[yycheck846,31408
+static const yytype_uint8 yystos[yystos877,33310
+#define yyerrok	905,35076
+#define yyclearin	906,35111
+#define YYEMPTY	907,35148
+#define YYEOF	908,35170
+#define YYACCEPT	910,35188
+#define YYABORT	911,35222
+#define YYERROR	912,35255
+#define YYFAIL	919,35493
+#define YYRECOVERING(921,35524
+#define YYBACKUP(923,35565
+#define YYTERROR	941,35993
+#define YYERRCODE	942,36012
+#define YYRHSLOC(949,36218
+# define YYLLOC_DEFAULT(951,36277
+#  define YY_LOCATION_PRINT(977,37190
+#  define YY_LOCATION_PRINT(982,37370
+# define YYLEX 990,37515
+# define YYLEX 992,37556
+#  define YYFPRINTF 1000,37714
+# define YYDPRINTF(1003,37751
+# define YY_SYMBOL_PRINT(1009,37858
+yy_symbol_value_print 1029,38400
+yy_symbol_print 1061,39068
+yy_stack_print 1087,39914
+# define YY_STACK_PRINT(1101,40216
+yy_reduce_print 1115,40626
+# define YY_REDUCE_PRINT(1139,41226
+int yydebug;1147,41455
+# define YYDPRINTF(1149,41489
+# define YY_SYMBOL_PRINT(1150,41514
+# define YY_STACK_PRINT(1151,41569
+# define YY_REDUCE_PRINT(1152,41606
+# define YYINITDEPTH 1158,41740
+# define YYMAXDEPTH 1169,42096
+#   define yystrlen 1178,42217
+yystrlen 1184,42401
+#   define yystpcpy 1201,42696
+yystpcpy 1208,42932
+yytnamerr 1236,43673
+yysyntax_error 1283,44732
+      enum { YYERROR_VERBOSE_ARGS_MAXIMUM 1296,45080
+yydestruct 1393,47901
+int yychar;1436,48630
+YYSTYPE yylval;1439,48695
+int yynerrs;1442,48751
+yyparse 1454,48933
+#define YYPOPSTACK(1507,50086
+#  undef YYSTACK_RELOCATE1595,52503
+
+scan-ops_pddl.y,1166
+#define YYMAXDEPTH 14,
+#define SCAN_ERR19,
+#define DOMDEF_EXPECTED 20,
+#define DOMAIN_EXPECTED 21,
+#define DOMNAME_EXPECTED 22,
+#define LBRACKET_EXPECTED 23,
+#define RBRACKET_EXPECTED 24,
+#define DOMDEFS_EXPECTED 25,
+#define REQUIREM_EXPECTED 26,
+#define TYPEDLIST_EXPECTED 27,
+#define LITERAL_EXPECTED 28,
+#define PRECONDDEF_UNCORRECT 29,
+#define TYPEDEF_EXPECTED 30,
+#define CONSTLIST_EXPECTED 31,
+#define PREDDEF_EXPECTED 32,
+#define NAME_EXPECTED 33,
+#define VARIABLE_EXPECTED 34,
+#define ACTIONFUNCTOR_EXPECTED 35,
+#define ATOM_FORMULA_EXPECTED 36,
+#define EFFECT_DEF_EXPECTED 37,
+#define NEG_FORMULA_EXPECTED 38,
+#define NOT_SUPPORTED 39,
+#define ACTION 40,
+#define NAME_STR 44,
+#define VARIABLE_STR 45,
+#define STANDARD_TYPE 46,
+static char *serrmsg[serrmsg49,
+static int sact_err;78,
+static char *sact_err_par sact_err_par79,
+static PlOperator *scur_op scur_op80,
+static Bool sis_negated 81,
+int supported(84,
+# define YYDEBUG 109,
+# undef YYERROR_VERBOSE114,
+# define YYERROR_VERBOSE 115,
+# define YYERROR_VERBOSE 117,
+# define YYTOKEN_TABLE 122,
+typedef union YYSTYPE126,
+int yyerror(977,
+void load_ops_file(997,

@@ -1,0 +1,155 @@
+#! /usr/bin/env python2.5
+# -*- coding: latin-1 -*-
+
+import sys
+import os
+
+CNF_nf=sys.argv[1]
+action_table_nf=sys.argv[2]
+observations_nf=sys.argv[3]
+CNF_new_nf=CNF_nf+'.new'
+
+if len(sys.argv) > 4 and sys.argv[4] == 'z':
+    solver='z'
+elif len(sys.argv) > 4 and sys.argv[4] == 'm':
+    solver='m'
+else:
+    print "argument number 4 can be 'm' for minisat 'z' for zchaff: ", sys.argv[4]
+    sys.exit(0)
+
+if len(sys.argv) > 5 and sys.argv[5] == 'd':
+    debug=True
+else:
+    debug=False
+
+debug2=debug
+if debug:
+    print sys.argv
+
+obs_f = file(observations_nf)
+obs_f.readline()
+observations=set()
+for j in obs_f.readlines():
+    j = j.strip()
+    if j <> '':
+        observations.add(j)
+
+CNF=file(CNF_nf)
+line_ok = False
+while not line_ok:
+    header_cnf=CNF.readline()
+    if header_cnf[0] == 'p':
+        line_ok = True
+        header_cnf = header_cnf.split()
+        orig_vars = int(header_cnf[2])
+        orig_clauses = int(header_cnf[3])
+
+def has_obs(s):
+    for token in observations:
+        if '-'+token in s:
+            return token,s
+    return token,False
+
+var2txt={}
+action2id={}
+action2var={}
+obs2action={}
+for token in observations:
+    obs2action[token] = set([])
+current_var = orig_vars
+for l in file(action_table_nf):
+    act = l.split()
+    horiz=act[0]
+    id=act[1]
+    act_name = act[2]
+    obs,result = has_obs(act_name)
+    if result is not False:
+        obs2action[obs].add(act_name)
+        if act_name not in action2id:
+            action2id[act_name] = []
+        action2id[act_name].append(int(id))
+        var2txt[int(id)] = horiz+act_name
+        if act_name not in action2var:
+            current_var += 1
+            action2var[act_name] = int(current_var)
+            var2txt[int(current_var)] = act_name
+
+new_clauses =[]
+# every cnf-var-action enforces the stationary policy var
+for act in action2id:
+    for id in action2id[act]:
+        cls = [-id,action2var[act],0]
+        new_clauses.append(cls)
+# stationary policy vars are exclusive each other
+for obs in observations:
+    acts = [action2var[a] for a in obs2action[obs]]
+    if False and debug:
+        print 'OBS', obs, acts
+    for i in xrange(0,len(acts)):
+        for j in xrange(i+1,len(acts)):
+            cls = [-acts[i],-acts[j],0]
+            new_clauses.append(cls)
+
+if debug:
+    print orig_vars, orig_clauses
+    print
+    print 'action2id'
+    for a in action2id:
+        print a, ":", action2id[a]
+    print
+    print 'action2var'
+    for a in action2var:
+        print a, ":", action2var[a]
+    print
+    print observations
+    print
+    print 'obs2action'
+    for o in obs2action:
+        print o, ":", obs2action[o]
+#     print
+#     print 'var2txt'
+#     for v in var2txt:
+#         print v, ":", var2txt[v]
+
+ 
+if debug2:
+    print
+    print '----------------------------------------'
+    print 'NEW CLAUSES!'
+    print
+    for cls in new_clauses:
+        for lit in cls:
+            if lit > 0:
+                print str(var2txt[lit])+'   ',
+            elif lit <> 0:
+                print "-"+str(var2txt[-lit])+'   ',
+        print
+    sys.exit(0)
+
+
+cnf_new_f=open(CNF_new_nf,'w')
+cnf_new_f.write("p cnf %d %d\n" % (current_var, orig_clauses+len(new_clauses)) )
+#old clauses
+for l in CNF:
+    cnf_new_f.write(l)
+#new clauses
+for cls in new_clauses:
+    for lit in cls:
+        cnf_new_f.write(str(lit)+' ')
+    cnf_new_f.write('\n')
+cnf_new_f.close()
+
+"""
+TODO: imprimir el CNF
+readable
+y ver que está haciendo.
+Sospecho un lío de polaridad
+"""
+
+if solver=='z':
+    os.system('~/num2sat/solvers/zchaff/zchaff '+CNF_new_nf)
+elif solver=='m':
+    os.system('~/num2sat/solvers/minisat/MiniSat_v1.14/minisat '+CNF_new_nf)
+else:
+    print 'ERROR: Which sat solver?'
+

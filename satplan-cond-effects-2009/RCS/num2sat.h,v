@@ -1,0 +1,2013 @@
+head	1.2;
+access;
+symbols;
+locks
+	hlp:1.2; strict;
+comment	@ * @;
+
+
+1.2
+date	2009.03.25.22.45.02;	author hlp;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2009.03.19.22.12.39;	author hlp;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@seems to be sound: ignoring mutex between actions with same obs
+@
+text
+@
+/*
+ * THIS SOURCE CODE IS SUPPLIED  ``AS IS'' WITHOUT WARRANTY OF ANY KIND, 
+ * AND ITS AUTHOR AND THE JOURNAL OF ARTIFICIAL INTELLIGENCE RESEARCH 
+ * (JAIR) AND JAIR'S PUBLISHERS AND DISTRIBUTORS, DISCLAIM ANY AND ALL 
+ * WARRANTIES, INCLUDING BUT NOT LIMITED TO ANY IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE, AND
+ * ANY WARRANTIES OR NON INFRINGEMENT.  THE USER ASSUMES ALL LIABILITY AND
+ * RESPONSIBILITY FOR USE OF THIS SOURCE CODE, AND NEITHER THE AUTHOR NOR
+ * JAIR, NOR JAIR'S PUBLISHERS AND DISTRIBUTORS, WILL BE LIABLE FOR 
+ * DAMAGES OF ANY KIND RESULTING FROM ITS USE.  Without limiting the 
+ * generality of the foregoing, neither the author, nor JAIR, nor JAIR's
+ * publishers and distributors, warrant that the Source Code will be 
+ * error-free, will operate without interruption, or will meet the needs 
+ * of the user.
+ */
+
+
+
+/*********************************************************************
+ * File: num2sat.h
+ * Description: Types and structures for the num2sat planner.
+ *
+ *        --------- PDDL2.1 level 2 --------------
+ *
+ * Author: Joerg Hoffmann 2006
+ *
+ *********************************************************************/ 
+
+
+
+
+
+
+
+
+#ifndef __NUM2SAT_H
+#define __NUM2SAT_H
+
+
+
+
+
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <strings.h>
+#include <string.h>
+#include <ctype.h>
+#include <sys/types.h>
+#include <sys/timeb.h>
+#include <sys/times.h>
+
+
+
+
+
+
+
+
+
+/*
+ *  ------------------------------------ DEFINES ----------------------------
+ */
+
+
+
+
+
+
+
+
+
+
+
+/***********************
+ * MEANINGLESS HELPERS *
+ ***********************/
+
+
+
+
+/* strcmp returns 0 if two strings are equal, which is not nice */
+#define SAME 0
+
+
+
+
+
+
+
+
+
+/****************
+ * PARSING ETC. *
+ ****************/
+
+
+
+
+
+
+
+
+
+/* various defines used in parsing
+ */
+#define HIDDEN_STR "#"
+#define AXIOM_STR "AXIOM"
+#define NAME_STR "name\0"
+#define VARIABLE_STR "variable\0"
+#define STANDARD_TYPE "OBJECT\0"
+#define EITHER_STR "EITHER"
+
+
+
+
+
+
+
+
+
+/***************************
+ * SOME ARBITRARY SETTINGS *
+ ***************************/
+
+
+
+
+
+
+
+/* maximal string length
+ */
+#define MAX_LENGTH 256 
+
+
+/* marks border between connected items 
+ */
+#define CONNECTOR "~"
+
+
+/* max number of expressions in one conjunction
+ */
+#define MAX_PSI_EXPRESSIONS 100
+
+/* max number of constraints in one conjunction
+ */
+#define MAX_PSI_CONSTRAINTS 100
+
+
+
+
+
+
+
+
+/************************
+ * INSTANTIATION LIMITS *
+ ************************/
+
+
+
+
+
+
+
+
+#define MAX_CONSTANTS 2000
+#define MAX_PREDICATES 5000
+#define MAX_FUNCTIONS 50
+#define MAX_TYPES 50
+#define MAX_ARITY 5
+#define MAX_VARS 15
+
+
+#define MAX_TYPE 2000
+
+
+#define MAX_OPERATORS 5000
+
+
+/* in DNF: AND with OR - sons - collect 'hitting set':
+ * one son of each OR node. 
+ *
+ * this here is initial max number of such son s that can be collected
+ * (grows dynamically, if required)
+ */
+#define MAX_HITTING_SET_DEFAULT 1000
+
+
+#define MAX_TYPE_INTERSECTIONS 10
+
+
+#define MAX_RELEVANT_FACTS 100000
+#define MAX_RELEVANT_FLUENTS 100000
+#define MAX_RELEVANT_CONSTRAINTS 10000
+#define MAX_RELEVANT_PSIS 10000
+
+
+
+
+
+
+
+
+
+
+/******************************************
+ * DOMAIN STRUCTURE AND SEARCHING LIMITS *
+ ******************************************/
+
+
+
+
+
+
+#define MAX_STATE 1000
+
+
+#define MAX_PLAN_LENGTH 100
+
+
+
+
+
+
+
+/****************
+ * CODE DEFINES *
+ ****************/
+
+
+
+
+
+
+
+
+
+/* not a real 'code' define; used in relax and search to encode
+ * infinite level number / plan length
+ */
+#ifndef INFINITY
+#define INFINITY -1
+#endif
+
+
+
+
+
+
+
+/* define boolean types if not allready defined
+ */
+#ifndef Bool
+typedef unsigned char Bool;
+#ifndef TRUE /* we assume that FALSE is also not defined */
+#define TRUE 1
+#define FALSE 0
+#endif /* TRUE */
+#endif /* Bool */
+
+
+/* code a param number into a negative number and vice versa
+ */
+#define ENCODE_VAR( val ) (val * (-1)) - 1
+#define DECODE_VAR( val ) (val + 1) * (-1)
+
+#define GET_CONSTANT( val, pointer ) ( val >= 0 ) ? val : pointer->inst_table[DECODE_VAR( val )]
+
+
+/* Check allocated memory
+ */
+#define CHECK_PTR(p) if (NULL == (p)) { \
+  fprintf(stdout, "\n\aNO MEMORY in file %s:%d\n\n", __FILE__, __LINE__); \
+  exit(1);}
+
+
+/* add elapsed time from main local time vars to specified val
+ */
+#define TIME( val ) val += ( float ) ( ( end.tms_utime - start.tms_utime + \
+					 end.tms_stime - start.tms_stime  ) / 100.0 )
+
+
+
+#define TIMECHECK { times( &gTend ); if ( (gcmd_line.T != -1) && (gTend.tms_utime - gTstart.tms_utime + gTend.tms_stime - gTstart.tms_stime  + gTend.tms_cutime - gTstart.tms_cutime + gTend.tms_cstime - gTstart.tms_cstime > gcmd_line.T * 100) )   { printf("\n\nOverall planner timed out!\n\n"); exit( 1 ); }}
+
+
+
+
+
+
+
+
+
+
+
+/*
+ *  ------------------------------ DATA STRUCTURES ----------------------------
+ */
+
+
+
+
+
+
+
+
+
+
+
+/*******************
+ * GENERAL HELPERS *
+ *******************/
+
+
+
+
+
+
+
+
+/* all command switches
+ */
+struct _command_line {
+
+  char path[MAX_LENGTH];
+  char ops_file_name[MAX_LENGTH];
+  char fct_file_name[MAX_LENGTH];
+  char mutex2ignore_file_name[MAX_LENGTH];
+  int display_info;
+
+  int debug;
+  Bool dRPG;
+  Bool dCNF;
+  Bool dHCNF;
+  Bool act_table;
+
+  int CNFencoding;
+  int CNFsolver;
+
+  Bool keep_optimization_vars;
+
+  Bool data;
+
+  int T;
+
+};
+
+
+
+typedef char *Token;
+
+
+
+
+
+
+
+
+
+
+
+
+/***********
+ * PARSING *
+ ***********/
+
+
+
+
+
+
+
+
+
+
+/* A list of strings
+ */
+typedef struct _TokenList {
+
+  char *item;
+  struct _TokenList *next;
+
+} TokenList;
+
+
+
+/* list of string lists
+ */
+typedef struct _FactList {
+
+  TokenList *item;
+  struct _FactList *next;
+
+} FactList;
+
+
+
+/* structure to store  typed-list-of <name>/<variable>,
+ * as they are declared in PDDL files
+ */
+typedef struct _TypedList {
+
+  char *name;
+
+  /* each item in this list is the name of a type which
+   * our type is the union of (EITHER - types ...)
+   *
+   * usually, this will default to a single-item TokenList.
+   */
+  TokenList *type;
+  /* after first sweep, this will contain the number in type table
+   */
+  int n;
+
+  struct _TypedList *next;
+
+} TypedList;
+
+
+
+/* only needed to parse in the predicates and their arg
+ * definitions
+ */
+typedef struct _TypedListList {
+
+  char *predicate;
+
+  TypedList *args;
+
+  struct _TypedListList *next;
+
+} TypedListList;
+
+
+
+typedef enum _ExpConnective{FHEAD = 1000,
+			    NUMBER,
+			    MINUS,
+			    AD,
+                            SU, 
+			    MU, 
+			    DI} ExpConnective;
+
+
+
+typedef struct _ParseExpNode {
+
+  ExpConnective connective;
+
+  /* NULL anywhere except when node is FHEAD or NUMBER
+   * (in which case it is fn name ... resp. number (int or float) as string
+   */
+  TokenList *atom;
+
+  /* both NULL in FHEAD;
+   * in MINUS, left is son and right is NULL
+   * else (binary operators), left and right operand
+   */
+  struct _ParseExpNode *leftson, *rightson;
+
+} ParseExpNode;
+
+
+
+/* This type indicates whether a node in the pddl tree stands for
+ * an atomic expression, a junctor or a quantor. 
+ */
+typedef enum _Connective{TRU = 2000,
+			 FAL,
+			 ATOM,
+			 COMP,
+			 NEF,
+			 NOT, 
+			 AND, 
+			 OR, 
+			 ALL, 
+			 EX, 
+			 WHEN} Connective;
+
+
+
+typedef enum _Comparator{IGUAL = 3000, /* technical if conds are array comp exp, resp float */
+			 LE,
+			 LEQ,
+			 EQ,
+			 GEQ,
+			 GE} Comparator;
+
+
+
+
+typedef enum _NumericEffectType{ASSIGN = 4000,
+				SCALE_UP,
+				SCALE_DOWN,
+				INCREASE,
+				DECREASE} NumericEffectType;
+
+
+
+
+/*
+ * This is a node in the tree to parse PDDL files
+ */
+typedef struct _PlNode {
+
+  /* type of the node
+   */
+  Connective connective;
+
+  /* only for parsing: the var args in quantifiers
+   */
+  TypedList *parse_vars;
+
+  /* AND, OR, NOT, WHEN,
+   * COMP, NEF         => NULL
+   * ALL, EX            => the quantified variable with its type
+   * ATOM               => the atom as predicate->param1->param2->...
+   */
+  TokenList *atom;
+  /* all except COMP, NEF => NULL
+   * COMP, NEF => left hand, right hand
+   */
+  Comparator comp;
+  NumericEffectType neft;
+  ParseExpNode *lh, *rh;
+
+  /* (a) for AND, OR this is the list of sons(a AND b AND c...),
+   * (b) for the rest this is the son, e.g. a subtree that is negated
+   * (c) for WHEN, the first son is the condition and the next son
+   * is the effect
+   */
+  struct _PlNode *sons;
+
+  /* if you have a list of sons, they are connected by next
+   */
+  struct _PlNode *next;
+
+} PlNode;
+
+
+/*
+ * This resembles an uninstantiated PDDL operator
+ */
+typedef struct _PlOperator {
+
+  char *name;
+
+  /* only important for PDDL where :VARS may be added to the param list
+   * which must be hidden when writing the plan to an output file
+   */
+  int number_of_real_params; 
+
+  /* the params, as they are declared in domain file
+   */
+  TypedList *parse_params;
+
+  /* params is a list of variable/type pairs, such that:
+   * factlist->item = [variable] -> [type]
+   */
+  FactList *params;
+  PlNode *preconds;
+  PlNode *effects;
+
+  struct _PlOperator *next;
+
+} PlOperator;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/***************** 
+ * INSTANTIATION *
+ *****************/
+
+
+
+
+
+
+
+
+
+/* helpers
+ */
+
+typedef int TypeArray[MAX_TYPE_INTERSECTIONS];
+
+typedef int *int_pointer;
+
+
+
+
+/* first step structures: parsing & preprocessing
+ */
+
+typedef struct _Fact {
+
+  int predicate, args[MAX_ARITY];
+
+} Fact;
+
+
+
+typedef struct _Fluent {
+
+  int function, args[MAX_ARITY];
+
+} Fluent;
+
+
+
+typedef struct _FluentValue {
+
+  Fluent fluent;
+  float value;
+
+} FluentValue;
+
+
+
+typedef struct _Facts {
+
+  Fact *fact;
+
+  struct _Facts *next;
+
+} Facts;
+
+
+
+typedef struct _FluentValues {
+
+  Fluent fluent;
+  float value;
+
+  struct _FluentValues *next;
+
+} FluentValues;
+
+
+
+typedef struct _ExpNode {
+
+  ExpConnective connective;
+
+  /* in FHEAD nodes, pre-processing
+   */
+  Fluent *fluent;
+  /* in FHEAD nodes after pre-processes have finished.
+   * (internal number of relevant fluent, or -1 if not
+   * relevant)
+   */
+  int fl;
+  /* this will be used for HCNF only: the CNFid of this fluent,
+   * at the layer where the expression appears.
+   */
+  int CNFid;
+
+  /* helper for LNF: if that fl is multiplied, this is the
+   * respective constant after pre-normalization.
+   */
+  float c;
+
+  /* in NUMBER nodes
+   */
+  float value;
+
+  /* in MINUS nodes
+   */
+  struct _ExpNode *son;
+
+  /* in all others
+   */
+  struct _ExpNode *leftson, *rightson;
+
+} ExpNode, *ExpNode_pointer;
+
+
+
+typedef struct _WffNode {
+
+  Connective connective;
+
+  /* in ALL/EX s
+   */
+  int var, var_type;
+  char *var_name;
+
+  /* in AND/OR s
+   */
+  struct _WffNode *sons;
+  /* sons are doubly connected linear list
+   */
+  struct _WffNode *next;
+  struct _WffNode *prev;
+
+  /* in ATOMs
+   */
+  Fact *fact;
+  /* after translation: mark NOT-p s for efficiency
+   */
+  int NOT_p;
+
+  /* in ALL/EX/NOT
+   */
+  struct _WffNode *son;
+
+  /* in COMP
+   */
+  Comparator comp;
+  ExpNode *lh, *rh;
+
+  /* for expansion speedup
+   */
+  Bool visited;
+
+  /* no WHEN s here... use Pl Connectives anyway for simplicity
+   */
+
+} WffNode, *WffNode_pointer;
+
+
+
+typedef struct _Literal {
+
+  Bool negated;
+
+  Fact fact;
+
+  struct _Literal *next;
+  struct _Literal *prev;
+
+} Literal;
+
+
+
+typedef struct _NumericEffect {
+
+  Fluent fluent;
+  NumericEffectType neft;
+
+  ExpNode *rh;
+
+  struct _NumericEffect *next;
+  struct _NumericEffect *prev;
+
+} NumericEffect;
+
+
+
+typedef struct _Effect {
+
+  int num_vars, var_types[MAX_VARS];
+  char *var_names[MAX_VARS];
+
+  WffNode *conditions;
+
+  Literal *effects;
+  NumericEffect *numeric_effects;
+
+  struct _Effect *next;
+  struct _Effect *prev;
+
+} Effect;
+
+
+
+typedef struct _Operator {
+
+  char *name, *var_names[MAX_VARS];
+  int number_of_real_params; 
+
+  int num_vars, var_types[MAX_VARS];
+  Bool removed[MAX_VARS];
+ 
+  WffNode *preconds;
+
+  Effect *effects;
+
+  Bool hard;
+
+} Operator, *Operator_pointer;
+
+
+
+
+
+
+/* second step: structures that keep already normalized
+ * operators
+ */
+
+
+
+
+typedef struct _NormEffect {
+
+  int num_vars, var_types[MAX_VARS];
+  int inst_table[MAX_VARS];
+
+  Fact *conditions;
+  int num_conditions;
+
+  Fact *adds;
+  int num_adds;
+  Fact *dels;
+  int num_dels;
+
+  /* numerical parts: not yet normalized any further; seems that
+   * normalizing requires certain additional structures +
+   * transformation, and that these will better be done when 
+   * the representation is fully instantiated already.
+   */
+  Comparator *numeric_conditions_comp;
+  ExpNode_pointer *numeric_conditions_lh, *numeric_conditions_rh;
+  int num_numeric_conditions;
+
+  NumericEffectType *numeric_effects_neft;
+  Fluent *numeric_effects_fluent;
+  ExpNode_pointer *numeric_effects_rh;
+  int num_numeric_effects;
+
+  struct _NormEffect *prev;
+  struct _NormEffect *next;
+
+} NormEffect;
+
+
+
+typedef struct _NormOperator {
+  
+  Operator *operator;
+
+  int num_vars, var_types[MAX_VARS];
+  int inst_table[MAX_VARS];
+  int removed_vars[MAX_VARS], num_removed_vars, type_removed_vars[MAX_VARS];
+
+  Fact *preconds;
+  int num_preconds;
+  /* numeric precondition still full scale represented, see above
+   */
+  Comparator *numeric_preconds_comp;
+  ExpNode_pointer *numeric_preconds_lh, *numeric_preconds_rh;
+  int num_numeric_preconds;
+
+  NormEffect *effects;
+
+  Bool out;
+
+} NormOperator, *NormOperator_pointer;
+  
+
+
+/* minimal info for a fully instantiated easy operator;
+ * yields one action when expanded
+ */
+typedef struct _EasyTemplate {
+
+  NormOperator *op;
+  int inst_table[MAX_VARS];
+
+  struct _EasyTemplate *prev;
+  struct _EasyTemplate *next;
+
+} EasyTemplate;
+
+
+
+
+
+
+/* structures for hard ops
+ */
+
+
+
+
+
+/* intermediate step: structure for keeping hard ops
+ * with normalized precondition, but arbitrary
+ * effect conditions
+ */
+typedef struct _MixedOperator {
+  
+  Operator *operator;
+
+  int inst_table[MAX_VARS];
+
+  Fact *preconds;
+  int num_preconds;
+  /* numeric part, pre-normalized
+   */
+  Comparator *numeric_preconds_comp;
+  ExpNode_pointer *numeric_preconds_lh, *numeric_preconds_rh;
+  int num_numeric_preconds;
+
+  Effect *effects;
+
+  struct _MixedOperator *next;
+
+} MixedOperator;
+
+
+
+/* last hard step: everything is action - like, except that
+ * facts are not yet integer coded
+ */  
+
+
+
+typedef struct _PseudoActionEffect {
+
+  Fact *conditions;
+  int num_conditions;
+
+  Fact *adds;
+  int num_adds;
+  Fact *dels;
+  int num_dels;
+
+
+  /* and the numeric parts again...
+   */
+  Comparator *numeric_conditions_comp;
+  ExpNode_pointer *numeric_conditions_lh, *numeric_conditions_rh;
+  int num_numeric_conditions;
+
+  NumericEffectType *numeric_effects_neft;
+  Fluent *numeric_effects_fluent;
+  ExpNode_pointer *numeric_effects_rh;
+  int num_numeric_effects;
+
+  struct _PseudoActionEffect *next;
+
+} PseudoActionEffect;
+
+
+
+typedef struct _PseudoAction {
+
+  Operator *operator;
+
+  int inst_table[MAX_VARS];
+
+  Fact *preconds;
+  int num_preconds;
+  /* numeric part, pre-normalized
+   */
+  Comparator *numeric_preconds_comp;
+  ExpNode_pointer *numeric_preconds_lh, *numeric_preconds_rh;
+  int num_numeric_preconds;
+
+  PseudoActionEffect *effects;
+  int num_effects;
+
+} PseudoAction, *PseudoAction_pointer;
+
+
+
+typedef struct _ActionEffect {
+
+  int *conditions;
+  int num_conditions;
+
+  int *adds;
+  int num_adds;
+  int *dels;
+  int num_dels;
+
+  /* and the numeric parts again; fluents all as fl ints;
+   *
+   * normalization for cond as below for pre;
+   * norm. for effects by restriction of types (?),
+   * right hand side float (?)
+   */
+  Comparator *numeric_conditions_comp;
+  ExpNode_pointer *numeric_conditions_lh, *numeric_conditions_rh;
+  int num_numeric_conditions;
+  /* the ID representation of this!
+   */
+  int *con_constraint_id;
+  /* and the ID of the overall psi = pre(a) + (this con)!
+   * -1 if no numeric conds.
+   * psi conjoined with pre since this is more natural in 
+   * RPG bulding, where
+   * an eff is instantiated only with those tuples that
+   * satisfy this entire conjunction.
+   */
+  int con_psi_id;
+
+  NumericEffectType *numeric_effects_neft;
+  int *numeric_effects_fl;
+  ExpNode_pointer *numeric_effects_rh;
+  int num_numeric_effects;
+
+  /* this here will be the global ID of this effect.
+   * include so that we can identify the effect as an integer.
+   */
+  int id;
+
+
+
+  /* these two are made in inst_final.c to capture some special cases
+   * of when an effect can never be applied, or will never change
+   * the world state.
+   *
+   * out of use currently, ie not taken into account in RPG or CNF,
+   * since I guess the special cases are not very relevant.
+   * leave the stuff in just in case... 
+   */
+  Bool illegal;
+  Bool removed;
+
+} ActionEffect;
+
+
+
+typedef struct _Action {
+
+  NormOperator *norm_operator;
+  PseudoAction *pseudo_action;
+
+  char *name;
+  int num_name_vars;
+  int name_inst_table[MAX_VARS];
+
+  int inst_table[MAX_VARS];
+
+  int *preconds;
+  int num_preconds;
+  /* numeric part, in general format, with fluents encoded as fl ints
+   *
+   * also, will (?) be transformed to lh fl, rh float; then, expnodes as
+   * fast accessible as specialised structures. 
+   */
+  Comparator *numeric_preconds_comp;
+  ExpNode_pointer *numeric_preconds_lh, *numeric_preconds_rh;
+  int num_numeric_preconds;
+  /* the ID representation of this!
+   */
+  int *pre_constraint_id;
+  /* and the ID of the overall psi! 
+   * -1 if no numeric conds.
+   */
+  int pre_psi_id;
+
+
+
+  ActionEffect *effects;
+  int num_effects;
+
+  struct _Action *next;
+
+
+  /* this here will be the global ID of this action,
+   * ie its position in the gactions list.
+   */
+  int id;
+
+} Action;
+
+
+
+
+
+
+
+
+
+
+
+/* this guy will actually be used exclusively for the initial state...
+ */
+typedef struct _State {
+  
+  int *F;
+  int num_F;
+
+  Bool *f_D;
+  float *f_V;
+
+} State, *State_pointer;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* these here are the data structures for the RPG.
+ * made with linked lists, so as to avoid
+ * unnecessary memory consumption by allocation of 
+ * overlarge arrays.
+ */
+
+
+
+/* from pre, con, goal
+ */
+typedef struct _Psi {
+
+  /* array of ints containing the constraint IDs.
+   */
+  int psi[MAX_PSI_CONSTRAINTS];
+  int num_psi;
+
+} Psi, *Psi_pointer;
+
+
+
+/* the RPG structures
+ */
+typedef struct _RPGfact RPGfact;
+typedef struct _RPGvalue RPGvalue, *RPGvalue_pointer;
+typedef struct _RPGvaluetuple RPGvaluetuple, *RPGvaluetuple_pointer;
+typedef struct _RPGaction RPGaction;
+typedef struct _RPGeffect RPGeffect;
+typedef struct _RPGlayer RPGlayer;
+
+
+
+/* connectivity to speed up frame and mutex clauses.
+ */
+typedef struct _RPGactionlist RPGactionlist, *RPGactionlist_pointer;
+typedef struct _RPGeffectlist RPGeffectlist, *RPGeffectlist_pointer;
+
+
+
+
+
+struct _RPGfact {
+
+  Fact *p;
+  /* index of this fact in "grelevant_facts" array, i.e.,
+   * its id used everywhere. may be useful.
+   */
+  int id;
+
+  /* double linked to get more elegant implementation.
+   * currently, "list with one void start element":
+   * being able to in any case talk 
+   * about a "prev" element may be useful.
+   *
+   * also, one may conveniently keep these lists ordered, 
+   * to speed up membership tests (or whatever)
+   *
+   * in some cases, an end element will also be defined to
+   * fast implement "insert at end"; see below.
+   */
+  struct _RPGfact *prev;
+  struct _RPGfact *next;
+
+  /* the id of this fact, at the respective RPG level,
+   * in the CNF. ie its "name" in the CNF.
+   * default -1, set in CNF generation.
+   */
+  int CNFid;
+
+};
+
+
+
+struct _RPGaction {
+  
+  Action *a;
+  /* position of this action in gactions list.
+   * this is NOT an array index!!
+   */
+  int id;
+
+  /* effects, as present here.
+   */
+  RPGeffect *E;
+
+  struct _RPGaction *prev;
+  struct _RPGaction *next;
+
+  /* the id of this action, at the respective RPG level,
+   * in the CNF. ie its "name" in the CNF.
+   * default -1, set in CNF generation.
+   */
+  int CNFid;
+
+};
+
+
+
+struct _RPGeffect {
+
+  ActionEffect *e;
+  /* index of this effect in the resp action's "effects" array.
+   */
+  int id;
+
+  struct _RPGeffect *prev;
+  struct _RPGeffect *next;
+
+  /* the id of this effect, at the respective RPG level,
+   * in the CNF. ie its "name" in the CNF.
+   * default -1, set in CNF generation.
+   */
+  int CNFid;
+
+};
+
+
+
+/* a simple value list element.
+ */
+struct _RPGvalue {
+
+  float v;
+
+  struct _RPGvalue *prev;
+  struct _RPGvalue *next;
+
+  /* the id of this variable value, at the respective RPG level,
+   * in the CNF. ie its "name" in the CNF.
+   * default -1, set in CNF generation.
+   */
+  int CNFid;
+
+};
+
+
+
+/* a value tuple. vt will be an array
+ * indexed by fluent IDs, containing the value.
+ * "have" says for each fluent whether or not we actually care, ie we don't
+ * explicitly list the vars and their values, but
+ * just always take the entire vector and fill it up with "false"
+ * memory overhead (hopefully) benign, and hopefully
+ * makes implementation a little bit nicer to do. well, whatever.
+ */
+struct _RPGvaluetuple {
+
+  Bool *have;
+  float *vt;
+
+  struct _RPGvaluetuple *prev;
+  struct _RPGvaluetuple *next;
+
+  /* the id of this value tuple, at the respective RPG level,
+   * in the CNF. ie its "name" in the CNF.
+   * default -1, set in CNF generation.
+   */
+  int CNFid;
+
+};
+
+
+
+struct _RPGlayer {
+
+  /* the time index of this layer, just to have it somewhere.
+   */
+  int t;
+
+  /* facts, with end pointer.
+   */
+  RPGfact *P, *endP;
+  /* when allocating the fact list, this here is allocated
+   * to Bool array of size gnum_relevant_facts, 
+   * initialized to FALSE .. FALSE
+   * use for fast checking of propositional preconds.
+   */
+  Bool *is_P;
+
+  /* actions, with end pointer.
+   */
+  RPGaction *A, *endA;
+
+
+
+  /* numeric things...
+   */
+
+  /* later: possibly distinguish between old and new
+   *        values and value tuples; this could probably be
+   *        a significant saving if there are many tuples and 
+   *        many layers.
+   */
+
+  /* the ids of the numeric vars: aray over fluent indices.
+   * will only be used in HCNF!
+   */
+  int *x_CNFid;
+
+  /* this here will be an array indexed by the fluent IDs.
+   * each array entry contains the start element of the respective 
+   * value list.
+   */
+  RPGvalue_pointer *V;
+
+  /* this here will be an array indexed by the constraint IDs.
+   * each array entry contains the start element of the respective 
+   * value tuple list (all tuples in here satisfying this constraint).
+   */
+  RPGvaluetuple_pointer *constraint_VT;
+  /* the id of this psi, at the respective RPG level,
+   * in the CNF. ie its "name" in the CNF.
+   * default NULL pointer, created in CNF generation.
+   */
+  int *constraint_CNFid;
+
+  /* this here will be an array indexed by the psi IDs.
+   * each array entry contains the start element of the respective 
+   * value tuple list (all tuples in here satisfying this psi).
+   */
+  RPGvaluetuple_pointer *psi_VT;
+  /* the id of this psi, at the respective RPG level,
+   * in the CNF. ie its "name" in the CNF.
+   * default NULL pointer, created in CNF generation.
+   */
+  int *psi_CNFid;
+
+
+
+  /* connectivity info, to speed up generation of
+   * mutex clauses and of frame clauses
+   */
+
+  /* array indexed over facts: which of the present effects adds me?
+   */
+  RPGeffectlist_pointer *tA, *tendA;
+  /* array indexed over facts: which of the present effects dels me?
+   */
+  RPGeffectlist_pointer *tD, *tendD;
+  /* array indexed over facts: which of the present effects has me in con?
+   */
+  RPGeffectlist_pointer *tC, *tendC;
+  /* array indexed over facts: which of the present actions has me in pre?
+   */
+  RPGactionlist_pointer *tP, *tendP;
+  /* array indexed over fluents: which of the present effects affects me?
+   */
+  RPGeffectlist_pointer *tXA, *tendXA;
+  /* array indexed over fluents: which of the present effects requires me in con, OR
+   *                             requires me in one of its eff right hand sides?
+   */
+  RPGeffectlist_pointer *tXC, *tendXC;
+  /* array indexed over fluents: which of the present actions requires me in pre?
+   */
+  RPGactionlist_pointer *tXP, *tendXP;
+
+
+
+  struct _RPGlayer *prev;
+  struct _RPGlayer *next;
+
+};
+
+
+
+
+struct _RPGactionlist {
+
+  RPGaction *a;
+
+  struct _RPGactionlist *prev;
+  struct _RPGactionlist *next;
+
+};
+
+
+
+struct _RPGeffectlist {
+
+  RPGeffect *e;
+
+  struct _RPGeffectlist *prev;
+  struct _RPGeffectlist *next;
+
+};
+
+
+
+
+
+
+
+
+/* now here goes the stuff for the CNFs.
+ */
+
+
+
+
+
+
+
+
+
+
+
+/* simplicissimo: a CNF is a pointer to a clause.
+ * a clause is an int array giving the CNFids,
+ * and a synchronized Bool array giving the signs.
+ * (TRUE[i] means var[i] is positive, 
+ * FALSE[i] means var[i] is negative)
+ */
+typedef struct _CNF {
+
+  int *CNFid;
+  Bool *sign;
+  int num;
+
+  struct _CNF *prev;
+  struct _CNF *next;
+
+} CNF;
+
+
+
+/* Hybrid CNFs
+ * have clauses that also contain numeric constraints.
+ * the fluents in these expressions will have the CNFid
+ * field set (to the CNFid of the fluent at the layer,
+ * naturally) so this is self-contained and can be directly
+ * thrown at the solver.
+ */
+typedef struct _HCNF {
+
+  int *pCNFid;
+  Bool *psign;
+  int pnum;
+
+  Comparator *ncomp;
+  ExpNode_pointer *nlhs, *nrhs;
+  Bool *nsign;
+  int nnum;
+
+  struct _HCNF *prev;
+  struct _HCNF *next;
+
+} HCNF;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+ *  -------------------------------- MAIN FN HEADERS ----------------------------
+ */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void output_planner_info( RPGlayer *rpg, int nractions );
+void ff_usage( void );
+Bool process_command_line( int argc, char *argv[] );
+
+
+
+
+
+
+
+
+
+/*
+ *  ----------------------------- GLOBAL VARIABLES ----------------------------
+ */
+
+
+
+
+
+
+
+
+
+
+
+
+/*******************
+ * GENERAL HELPERS *
+ *******************/
+
+
+
+
+
+
+
+
+
+
+/* used to time the different stages of the planner
+ */
+extern float gtempl_time, greach_time, grelev_time;
+extern float gRPG_time, gCNF_time, gSAT_time;
+
+/* the command line inputs
+ */
+extern struct _command_line gcmd_line;
+
+
+
+
+
+
+
+
+
+
+
+/***********
+ * PARSING *
+ ***********/
+
+
+
+
+
+
+
+
+
+
+
+/* used for pddl parsing, flex only allows global variables
+ */
+extern int gbracket_count;
+extern char *gproblem_name;
+
+/* The current input line number
+ */
+extern int lineno;
+
+/* The current input filename
+ */
+extern char *gact_filename;
+
+/* The pddl domain name
+ */
+extern char *gdomain_name;
+
+/* loaded, uninstantiated operators
+ */
+extern PlOperator *gloaded_ops;
+
+/* stores initials as fact_list 
+ */
+extern PlNode *gorig_initial_facts;
+
+/* not yet preprocessed goal facts
+ */
+extern PlNode *gorig_goal_facts;
+
+/* the types, as defined in the domain file
+ */
+extern TypedList *gparse_types;
+
+/* the constants, as defined in domain file
+ */
+extern TypedList *gparse_constants;
+
+/* the predicates and their arg types, as defined in the domain file
+ */
+extern TypedListList *gparse_predicates;
+
+/* the functions and their arg types, as defined in the domain file
+ */
+extern TypedListList *gparse_functions;
+
+/* the objects, declared in the problem file
+ */
+extern TypedList *gparse_objects;
+
+/* the metric
+ */
+extern Token gparse_optimization;
+extern ParseExpNode *gparse_metric;
+
+
+/* connection to instantiation ( except ops, goal, initial )
+ */
+
+/* all typed objects 
+ */
+extern FactList *gorig_constant_list;
+
+/* the predicates and their types
+ */
+extern FactList *gpredicates_and_types;
+
+/* the functions and their types
+ */
+extern FactList *gfunctions_and_types;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*****************
+ * INSTANTIATING *
+ *****************/
+
+
+
+
+
+
+
+
+
+
+/* global arrays of constant names,
+ *               type names (with their constants),
+ *               predicate names,
+ *               predicate aritys,
+ *               defined types of predicate args
+ */
+extern Token gconstants[MAX_CONSTANTS];
+extern int gnum_constants;
+extern Token gtype_names[MAX_TYPES];
+extern int gtype_consts[MAX_TYPES][MAX_TYPE];
+extern Bool gis_member[MAX_CONSTANTS][MAX_TYPES];
+extern int gtype_size[MAX_TYPES];
+extern int gnum_types;
+extern Token gpredicates[MAX_PREDICATES];
+extern int garity[MAX_PREDICATES];
+extern int gpredicates_args_type[MAX_PREDICATES][MAX_ARITY];
+extern int gnum_predicates;
+extern Token gfunctions[MAX_FUNCTIONS];
+extern int gf_arity[MAX_FUNCTIONS];
+extern int gfunctions_args_type[MAX_FUNCTIONS][MAX_ARITY];
+extern int gnum_functions;
+
+
+
+
+/* the domain in first step integer representation
+ */
+extern Operator_pointer goperators[MAX_OPERATORS];
+extern int gnum_operators;
+extern Fact *gfull_initial;
+extern int gnum_full_initial;
+extern FluentValue *gfull_fluents_initial;
+extern int gnum_full_fluents_initial;
+extern WffNode *ggoal;
+
+extern ExpNode *gmetric;
+
+
+
+/* stores inertia - information: is any occurence of the predicate
+ * added / deleted in the uninstantiated ops ?
+ */
+extern Bool gis_added[MAX_PREDICATES];
+extern Bool gis_deleted[MAX_PREDICATES];
+
+/* for functions we *might* want to say, symmetrically, whether it is
+ * increased resp. decreased at all.
+ *
+ * that is, however, somewhat involved because the right hand
+ * sides can be arbirtray expressions, so we have no guarantee
+ * that increasing really does adds to a functions value...
+ *
+ * thus (for the time being), we settle for "is the function changed at all?"
+ */
+extern Bool gis_changed[MAX_FUNCTIONS];
+
+
+
+/* splitted initial state:
+ * initial non static facts,
+ * initial static facts, divided into predicates
+ * (will be two dimensional array, allocated directly before need)
+ */
+extern Facts *ginitial;
+extern int gnum_initial;
+extern Fact **ginitial_predicate;
+extern int *gnum_initial_predicate;
+
+/* same thing for functions
+ */
+extern FluentValues *gf_initial;
+extern int gnum_f_initial;
+extern FluentValue **ginitial_function;
+extern int *gnum_initial_function;
+
+
+
+/* the type numbers corresponding to any unary inertia
+ */
+extern int gtype_to_predicate[MAX_PREDICATES];
+extern int gpredicate_to_type[MAX_TYPES];
+
+/* (ordered) numbers of types that new type is intersection of
+ */
+extern TypeArray gintersected_types[MAX_TYPES];
+extern int gnum_intersected_types[MAX_TYPES];
+
+
+
+/* splitted domain: hard n easy ops
+ */
+extern Operator_pointer *ghard_operators;
+extern int gnum_hard_operators;
+extern NormOperator_pointer *geasy_operators;
+extern int gnum_easy_operators;
+
+
+
+/* so called Templates for easy ops: possible inertia constrained
+ * instantiation constants
+ */
+extern EasyTemplate *geasy_templates;
+extern int gnum_easy_templates;
+
+
+
+/* first step for hard ops: create mixed operators, with conjunctive
+ * precondition and arbitrary effects
+ */
+extern MixedOperator *ghard_mixed_operators;
+extern int gnum_hard_mixed_operators;
+
+
+
+/* hard ''templates'' : pseudo actions
+ */
+extern PseudoAction_pointer *ghard_templates;
+extern int gnum_hard_templates;
+
+
+
+
+
+
+
+
+
+/* these here are the guys we start from for
+ * the core algorithm!
+ */
+
+
+
+/* store the final "relevant facts"
+ */
+extern Fact grelevant_facts[MAX_RELEVANT_FACTS];
+extern int gnum_relevant_facts;
+extern int gnum_pp_facts;
+/* store the "relevant fluents"
+ */
+extern Fluent grelevant_fluents[MAX_RELEVANT_FLUENTS];
+extern int gnum_relevant_fluents;
+extern Token grelevant_fluents_name[MAX_RELEVANT_FLUENTS];
+
+/* NEW: also collect all constraints mentioned, as well as 
+ * all relevant *conjunctions* psi of constraints. this will be
+ * convenient for tuple gathering during RPG (used also in CNF), since
+ * we need to do this only once for each relevant constraint/conjunction,
+ * rather than repeat it every time such a construct occurs.
+ */
+
+
+/* arrays of expression node pointers, and a comp;
+ * ID == array index will be used to identify
+ */
+extern ExpNode_pointer grelevant_constraints_lhs[MAX_RELEVANT_CONSTRAINTS];
+extern Comparator grelevant_constraints_comp[MAX_RELEVANT_CONSTRAINTS];
+extern ExpNode_pointer grelevant_constraints_rhs[MAX_RELEVANT_CONSTRAINTS];
+extern int gnum_relevant_constraints;
+
+extern Psi_pointer grelevant_psis[MAX_RELEVANT_PSIS];
+extern int gnum_relevant_psis;
+
+
+
+
+
+
+/* the final actions and problem representation
+ */
+/* ATTENTION! even though it looks otherwise, gactions is NOT
+ * allocated as an array!!!!! ONLY go through this by ->next 
+ * pointers, NOT by array indexing!!!
+ */
+extern Action *gactions;
+extern int gnum_actions;
+extern int gnum_effects;/* so we know how many effects there are in total */
+extern State ginitial_state;
+extern int *glogic_goal;
+extern int gnum_logic_goal;
+extern Comparator *gnumeric_goal_comp;
+extern ExpNode_pointer *gnumeric_goal_lh, *gnumeric_goal_rh;
+extern int gnum_numeric_goal;
+/* the ID representation of this!
+ */
+extern int *ggoal_constraint_id;
+/* and the ID of the overall psi!
+ */
+extern int ggoal_psi_id;
+
+
+
+/* to avoid memory leaks; too complicated to identify
+ * the exact state of the action to throw away (during construction),
+ * memory gain not worth the implementation effort.
+ */
+extern Action *gtrash_actions;
+
+
+
+
+/* The RPG!
+ */
+
+extern RPGlayer *gRPG;
+
+
+
+
+
+
+/* The CNF!
+ *
+ * including end pointer so we can conveniently keep appending more clauses
+ * at the end.
+ */
+extern CNF *gCNF, *gCNFend;
+/* also keep track of the nrs of vars and clauses.
+ */
+extern int gCNFnumvars, gCNFnumclauses;
+
+
+/* here, removed goal clauses will be chained in.
+ * just to avoid memory leaks, and to not do freeing,
+ * which sometimes behaves very oddly.
+ */
+extern CNF *gCNFtrash, *gCNFtrashend;
+
+
+
+
+
+
+/* The Hybrid CNF!
+ *
+ * including end pointer so we can conveniently keep appending more clauses
+ * at the end.
+ */
+extern HCNF *gHCNF, *gHCNFend;
+/* also keep track of the nrs of vars and clauses.
+ */
+extern int gHCNFnumvars, gHCNFnumclauses;
+
+
+/* here, removed goal clauses will be chained in.
+ * just to avoid memory leaks, and to not do freeing,
+ * which sometimes behaves very oddly.
+ */
+extern HCNF *gHCNFtrash, *gHCNFtrashend;
+
+
+
+
+
+
+/* these here are for communication with the main functions in RPGvaluetuples.c
+ */
+
+
+
+/* RPG_get_valuetuples
+ *
+ * takes an int array of constraint ids,
+ * and outs a list of value tuples into
+ * this dynamically allocated list here:
+ */
+extern RPGvaluetuple *gget_valuetuples_result;
+extern int gget_valuetuples_num_result;
+
+
+
+/* RPG_get_valuetuples_exp
+ *
+ * takes a psi id and an expression in bar{x},
+ * and outs synchronized lists of bar{x} value tuples and values,
+ * with the meaning that value[i] arises for exp under valuetuple[i].
+ * the tuples are all in this layer that are in agreement with at least
+ * one tuple satisfying psi.
+ * relies on that the value tuples for psi are assembled 
+ * in the RPG layer already.
+ */
+extern RPGvaluetuple *gget_valuetuples_exp_result_vt;
+extern RPGvalue *gget_valuetuples_exp_result_v;
+extern int gget_valuetuples_exp_num_result;
+
+
+
+
+/* for time-out
+ */
+extern struct tms gTstart, gTend;
+
+
+extern char *mutex2ignore[MAX_OPERATORS+1];
+
+
+#endif /* __NUM2SAT_H */
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d48 1
+d170 1
+a170 1
+#define MAX_PREDICATES 500
+d331 1
+d338 1
+d1966 2
+@

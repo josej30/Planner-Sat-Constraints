@@ -1,0 +1,16 @@
+2009-03-31  Hector Palacios  <hlp@cumbe.ldc.usb.ve>
+
+	* CNF.c: - cache for get_action_name
+
+	* output.c, output.h: print_fact_file
+
+2009-03-25  Hector Palacios  <hlp@cumbe.ldc.usb.ve>
+
+	* CNF.c, main.c, num2sat.h:
+	seems to be sound: ignoring mutex between actions with same obs
+
+2009-03-19  Hector Palacios  <hlp@cumbe.ldc.usb.ve>
+
+	* lex-fct_pddl.l, lex-ops_pddl.l, makefile, scan-fct_pddl.y, scan-ops_pddl.y, CNF.c, CNF.h, HCNF.c, HCNF.h, RPG.c, RPG.h, RPGvaluetuples.c, RPGvaluetuples.h, inst_easy.c, inst_easy.h, inst_final.c, inst_final.h, inst_hard.c, inst_hard.h, inst_pre.c, inst_pre.h, main.c, memory.c, memory.h, num2sat.h, output.c, output.h, parse.c, parse.h:
+	New file.
+

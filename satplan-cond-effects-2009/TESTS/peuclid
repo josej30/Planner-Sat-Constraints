@@ -1,0 +1,17 @@
+(define (problem euclid-10-8)
+(:domain Euclid)
+
+(:init 
+(= (value a) 20)
+(= (value b) 18)
+
+(at l1)
+)
+    
+(:goal 
+(and 
+(at l3)
+)
+)
+                
+)
