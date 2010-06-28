@@ -78,9 +78,18 @@ def parse_pddl_file(type, filename):
     raise SystemExit("Error: Could not parse %s file: %s\n" % (type, filename))
 
 def get_predicates(nf):
-  tokens = tokenize(file(nf))
-  next_token = ""
-  while next_token <> ":PREDICATES":
-      next_token = tokens.next()
-  return list(parse_list_aux(tokens))
+	tokens = tokenize(file(nf))
+	next_token = ""
+	while next_token <> ":PREDICATES":
+		next_token = tokens.next()
+	return list(parse_list_aux(tokens))
+
+# Codigo JJ
+
+def get_constraints(nf):
+	tokens = tokenize(file(nf))
+	next_token = ""
+	while next_token <> ":CONSTRAINTS":
+		next_token = tokens.next()
+	return list(parse_list_aux(tokens))
 

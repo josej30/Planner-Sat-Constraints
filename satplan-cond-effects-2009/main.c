@@ -61,9 +61,6 @@
 
 
 
-
-
-
 /*
  *  ----------------------------- GLOBAL VARIABLES ----------------------------
  */
@@ -554,7 +551,7 @@ Bool lfound_plan;
 int main( int argc, char *argv[] )
 
 {
-
+  
   /* resulting name for ops file
    */
   char ops_file[MAX_LENGTH] = "";
@@ -568,6 +565,7 @@ int main( int argc, char *argv[] )
   char command2[MAX_LENGTH]; /* for trying another path */
   /* for getting their answer.
    */
+  char command3[MAX_LENGTH];
   FILE *SATRES;
 
   /* sat solver data.
@@ -626,7 +624,6 @@ int main( int argc, char *argv[] )
   sprintf(ops_file, "%s%s", gcmd_line.path, gcmd_line.ops_file_name);
   sprintf(fct_file, "%s%s", gcmd_line.path, gcmd_line.fct_file_name);
 
-
   /* parse the input files
    */
 
@@ -647,6 +644,8 @@ int main( int argc, char *argv[] )
   if ( gcmd_line.display_info >= 1 ) {
     printf(" ... done.\nff: parsing problem file"); 
   }
+  sprintf(command3, "python removeconstraints.py %s",fct_file);
+  system(command3);
   load_fct_file( fct_file );
   if ( gcmd_line.display_info >= 1 ) {
     printf(" ... done.\n\n");
@@ -1040,6 +1039,7 @@ int main( int argc, char *argv[] )
 
       sprintf(command, "%s/solvers/mathsat/mathsat-3.3.1/mathsat CNF > SATRES", num2satpath);
       sprintf(command2, "%s/solvers/mathsat/mathsat-3.3.1/mathsat CNF > SATRES", here);
+
       if ( gcmd_line.display_info ) {
 	printf("\nInvoking MATHSAT solver, command:");
 	printf("\n%s", command);
@@ -1116,7 +1116,8 @@ int main( int argc, char *argv[] )
     output_planner_info(gRPG, nractions);
   }
 
-
+  sprintf(command3, "python timemachine.py %s",fct_file);
+  system(command3);
 
   printf("\n\n");
   exit( 0 );

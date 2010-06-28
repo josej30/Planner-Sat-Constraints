@@ -15,4 +15,7 @@
 	(HANDEMPTY))
 
 (:goal (AND (ON D C) (ON C B) (ON B A)))
+
+(:constraints (always ONTABLE C))
+
 )
