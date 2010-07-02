@@ -644,7 +644,9 @@ int main( int argc, char *argv[] )
   if ( gcmd_line.display_info >= 1 ) {
     printf(" ... done.\nff: parsing problem file"); 
   }
-  sprintf(command3, "python removeconstraints.py %s",fct_file);
+  sprintf(command3, "python addons/removeconstraints.py %s",fct_file);
+  system(command3);
+  sprintf(command3, "python addons/parseconstraints.py");
   system(command3);
   load_fct_file( fct_file );
   if ( gcmd_line.display_info >= 1 ) {
@@ -824,6 +826,34 @@ int main( int argc, char *argv[] )
       CNF_statistics(t, gCNF, gCNFnumvars, gCNFnumclauses);
       fflush(stdout);
     }
+
+/* Pruebas */
+
+  char* predicado = "CLEAR";
+  int pred = position_in_predicates_table(predicado);
+  char* constante = "D";
+  int con = position_in_constants_table(constante);
+
+printf("******* %i\n",pred);
+printf("******* %i\n",con);
+
+
+
+	sprintf(command3, "addons/addconstraints.py CNF action-table %s",
+		gcmd_line.mutex2ignore_file_name );
+	system(command3);
+
+/* Fin Pruebas */
+
+
+/* 
+##########################################################################################
+##########################################################################################
+##########################################################################################
+##########################################################################################
+##########################################################################################
+##########################################################################################
+*/
     
     goalreached = FALSE;
     while ( TRUE ) {
@@ -1116,7 +1146,7 @@ int main( int argc, char *argv[] )
     output_planner_info(gRPG, nractions);
   }
 
-  sprintf(command3, "python timemachine.py %s",fct_file);
+  sprintf(command3, "python addons/timemachine.py %s",fct_file);
   system(command3);
 
   printf("\n\n");

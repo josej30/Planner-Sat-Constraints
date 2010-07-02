@@ -1,3 +1,5 @@
-(:constraints (always ONTABLE C))
+(:constraints (always CLEAR D))
+
+)
 
 )

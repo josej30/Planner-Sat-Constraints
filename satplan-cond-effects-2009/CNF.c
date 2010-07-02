@@ -358,6 +358,8 @@ void CNF_initialize(RPGlayer *t,
     (*numclauses)++;
   }
 
+
+
   /* get the initial-value clauses.
    */
   for ( i = 0; i < gnum_relevant_fluents; i++ ) {
