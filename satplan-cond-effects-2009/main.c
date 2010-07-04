@@ -834,14 +834,17 @@ int main( int argc, char *argv[] )
   char* constante = "D";
   int con = position_in_constants_table(constante);
 
-printf("******* %i\n",pred);
-printf("******* %i\n",con);
-
-
-
-	sprintf(command3, "addons/addconstraints.py CNF action-table %s",
+/*	sprintf(command3, "addons/addconstraints.py CNF action-table %s",
 		gcmd_line.mutex2ignore_file_name );
-	system(command3);
+	system(command3);*/
+
+/* agregado JJ */
+/*	CNF_print_act_table(gRPG, "action-table");
+	sprintf(command, "python %s/solvers/minisat+mutex.py CNF action-table a m", 
+		here,
+		gcmd_line.mutex2ignore_file_name );
+	system(command);
+/* fin agregado JJ */
 
 /* Fin Pruebas */
 
@@ -906,6 +909,18 @@ printf("******* %i\n",con);
 /* 	exit( 0 ); */
       }
       if ( gcmd_line.CNFsolver == 0 ) {
+
+printf("\n\nFLAGFLAGFLAGFLAGFLAGFLAGFLAGFLAGFLAGFLAGFLAGFLAG\n\n");
+
+	CNF_print_act_table(gRPG, "action-table");
+	sprintf(command, "python %s/solvers/minisat+mutex.py CNF action-table a m", 
+		here);
+	system(command);
+
+
+
+
+
 	sprintf(command, "%s/solvers/minisat/MiniSat_v1.14/minisat CNF",
 		num2satpath);
 	sprintf(command2, "%s/solvers/minisat/MiniSat_v1.14/minisat CNF",

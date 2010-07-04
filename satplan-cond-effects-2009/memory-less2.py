@@ -72,20 +72,13 @@ if debug:
     print sys.argv
 
 predicates=parsepddl.get_predicates(domain_nf)
-print predicates
 if debug:
     print predicates
 
-##############################################
-# Codigo JJ
-##############################################
-#constraints=parsepddl.get_constraints(problem_nf)
-#print constraints
-#if debug:
-#    print constraints
-##############################################
-# Fin Codigo JJ
-##############################################
+####################### Codigo JJ
+constraints=parsepddl.get_constraints(problem_nf)
+print constraints
+######################
 
 # Obtaining observations and q-states
 obs=[]
@@ -132,21 +125,21 @@ loading_table = False
 
 # will contain translation table from short to long predicates
 short2long={}
-long2short={}
 for l in cf2cs.stdout.readlines():
-    print l,
-    if l.startswith('Short to Long atoms translation'):
-        loading_table = True
-    elif l.startswith('===============================') and \
-         len(short2long) <> 0:
-        loading_table = False
-    elif loading_table and '->' in l:
-        l = l.upper().split('->')
-        short = l[0].strip()
-        long = l[1].strip()
-        short2long[short] = long
-        long2short[long] = short
-
+    long2short={}
+        print l,
+        if l.startswith('Short to Long atoms translation'):
+            loading_table = True
+        elif l.startswith('===============================') and \
+             len(short2long) <> 0:
+            loading_table = False
+        elif loading_table and '->' in l:
+            l = l.upper().split('->')
+            short = l[0].strip()
+            long = l[1].strip()
+            short2long[short] = long
+            long2short[long] = short
+    
 res = cf2cs.wait()
 if(res < 0):
     pr('Error calling cf2cs: %d ' % res)

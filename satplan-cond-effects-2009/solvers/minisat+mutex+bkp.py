@@ -28,6 +28,26 @@ debug2=debug
 if debug:
     print sys.argv
 
+# Loading data calculated by memory-less.py
+loaded=marshal.load(file('memory-less.dat'))
+[mutex_obs,obs_l,states_l,obs_token,tags,short2long,long2short]=loaded
+
+# Loading observation file. Necessary?
+obs_f = file(observations_nf)
+obs_f.readline()
+observations=set()
+for j in obs_f.readlines():
+    j = j.strip()
+    if j <> '':
+        observations.add(j)
+if observations <> obs_token:
+    print 'DIFFERENCE IN OBSERVATION'
+    print
+    print obs_token
+    print
+    print observation
+    sys.exit(1)
+
 # Loading old CNF
 CNF=file(CNF_nf)
 line_ok = False
@@ -40,7 +60,10 @@ while not line_ok:
         orig_clauses = int(header_cnf[3])
 
 def has_obs(s):
-    return False
+    for token in observations:
+        if token in s:
+            return token,s
+    return token,False
 
 ########################################
 # Stationarity
@@ -52,6 +75,8 @@ fluent_horiz2id={}
 action2var={}
 obs2action={}
 max_horiz = -1
+for token in observations:
+    obs2action[token] = set([])
 current_var = orig_vars
 for l in file(action_table_nf):
     l = l.split()
@@ -65,15 +90,8 @@ for l in file(action_table_nf):
 
     id=int(l[2])
 
-    print l
-    action2id["(CLEAR"] = []
-    action2id["(CLEAR"].append(id)
-    current_var += 1
-    action2var["(CLEAR"] = int(current_var)
-    var2txt[int(current_var)] = "(CLEAR"
-
     if l[0].startswith('act'):
-        result = has_obs(name)
+        obs,result = has_obs(name)
         if result is not False:
             obs2action[obs].add(name)
             if name not in action2id:
@@ -85,7 +103,7 @@ for l in file(action_table_nf):
                 var2txt[int(current_var)] = name
     elif l[0].startswith('fluent'):
         fluent_horiz2id[(name,horiz)] = id
-
+        
 
 new_clauses =[]
 # every cnf-var-action enforces the stationary policy var
@@ -93,6 +111,15 @@ for act in action2id:
     for id in action2id[act]:
         cls = [-id,action2var[act],0]
         new_clauses.append(cls)
+# stationary policy vars are exclusive each other
+for obs in observations:
+    acts = [action2var[a] for a in obs2action[obs]]
+    if False and debug:
+        print 'OBS', obs, acts
+    for i in xrange(0,len(acts)):
+        for j in xrange(i+1,len(acts)):
+            cls = [-acts[i],-acts[j],0]
+            new_clauses.append(cls)
 
 if debug:
     print orig_vars, orig_clauses
@@ -106,7 +133,10 @@ if debug:
         print a, ":", action2var[a]
     print
     print observations
-    pri
+    print
+    print 'obs2action'
+    for o in obs2action:
+        print o, ":", obs2action[o]
 #     print
 #     print 'var2txt'
 #     for v in var2txt:
@@ -149,6 +179,23 @@ def gen_mutex(klt1, klt2):
             new_clauses.append(cls)
 
 
+if mutex_obs:
+    #print >>file('mutex-status','w'), 'Generating also Mutex for obs and states' 
+    print 'Generating also Mutex for obs and states' 
+    for (param,l) in [('OBS',obs_l),('',states_l)]:
+        for s0 in tags:
+            for o1 in range(0,len(l)):
+                klt1 = '(K'+param+l[o1]+'__'+s0+')'
+                #print 'Testing',klt1
+                if klt1 in long2short:
+                    #print 'SI!!'
+                    klt1_real = long2short[klt1]
+                    for o2 in range(o1+1,len(l)):
+                        klt2 = '(K'+param+l[o2]+'__'+s0+')'
+                        #print '+',klt2
+                        if klt2 in long2short:
+                            klt1_real = long2short[klt1]
+                            gen_mutex(klt1, klt2)
 
 # sys.exit(0)
 
