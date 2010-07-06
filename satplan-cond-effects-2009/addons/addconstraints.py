@@ -53,6 +53,10 @@ for cls in new_clauses:
         cnf_new_f.write(str(lit)+' ')
     cnf_new_f.write('\n')
 
+constraints=open('constraints.txt','r')
+for i in constraints:
+	print i
+
 for i in temp:
 	print i
 	cnf_new_f.write(str(i)+' ')

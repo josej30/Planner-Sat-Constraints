@@ -1,4 +1,4 @@
-(:constraints (always CLEAR D))
+(:constraints (always CLEAR D)
 
 )
 

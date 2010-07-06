@@ -13,7 +13,7 @@
 
 (:goal (AND (ON D B) (ON C A) (ON B C)))
 
-(:constraints (always CLEAR D))
+(:constraints (always CLEAR D)
 
 )
 

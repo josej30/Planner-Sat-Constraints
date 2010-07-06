@@ -648,8 +648,6 @@ int main( int argc, char *argv[] )
   system(command3);
   sprintf(command3, "python addons/parseconstraints.py");
   system(command3);
-  sprintf(command3, "python addons/timemachine.py %s",fct_file);
-  system(command3);
   load_fct_file( fct_file );
   if ( gcmd_line.display_info >= 1 ) {
     printf(" ... done.\n\n");
@@ -1135,6 +1133,10 @@ int main( int argc, char *argv[] )
   if ( gcmd_line.display_info ) {
     output_planner_info(gRPG, nractions);
   }
+
+
+  sprintf(command3, "python addons/timemachine.py %s",fct_file);
+  system(command3);
 
   printf("\n\n");
   exit( 0 );
