@@ -648,6 +648,8 @@ int main( int argc, char *argv[] )
   system(command3);
   sprintf(command3, "python addons/parseconstraints.py");
   system(command3);
+  sprintf(command3, "python addons/timemachine.py %s",fct_file);
+  system(command3);
   load_fct_file( fct_file );
   if ( gcmd_line.display_info >= 1 ) {
     printf(" ... done.\n\n");
@@ -827,28 +829,6 @@ int main( int argc, char *argv[] )
       fflush(stdout);
     }
 
-/* Pruebas */
-
-  char* predicado = "CLEAR";
-  int pred = position_in_predicates_table(predicado);
-  char* constante = "D";
-  int con = position_in_constants_table(constante);
-
-/*	sprintf(command3, "addons/addconstraints.py CNF action-table %s",
-		gcmd_line.mutex2ignore_file_name );
-	system(command3);*/
-
-/* agregado JJ */
-/*	CNF_print_act_table(gRPG, "action-table");
-	sprintf(command, "python %s/solvers/minisat+mutex.py CNF action-table a m", 
-		here,
-		gcmd_line.mutex2ignore_file_name );
-	system(command);
-/* fin agregado JJ */
-
-/* Fin Pruebas */
-
-
 /* 
 ##########################################################################################
 ##########################################################################################
@@ -903,23 +883,18 @@ int main( int argc, char *argv[] )
 
       CNF_output(gCNF, gCNFnumvars, gCNFnumclauses, tpp->t);
       TIMECHECK;
+
+	CNF_print_act_table(gRPG, "action-table");
+	sprintf(command, "python %s/addons/addconstraints.py CNF action-table", 
+		here);
+	system(command);
+
       if ( gcmd_line.debug && gcmd_line.dCNF ) {
 	CNF_print(gRPG, gCNF, gCNFnumvars, gCNFnumclauses);
 	printf("\n\n");
 /* 	exit( 0 ); */
       }
       if ( gcmd_line.CNFsolver == 0 ) {
-
-printf("\n\nFLAGFLAGFLAGFLAGFLAGFLAGFLAGFLAGFLAGFLAGFLAGFLAG\n\n");
-
-	CNF_print_act_table(gRPG, "action-table");
-	sprintf(command, "python %s/solvers/minisat+mutex.py CNF action-table a m", 
-		here);
-	system(command);
-
-
-
-
 
 	sprintf(command, "%s/solvers/minisat/MiniSat_v1.14/minisat CNF",
 		num2satpath);
@@ -1160,9 +1135,6 @@ printf("\n\nFLAGFLAGFLAGFLAGFLAGFLAGFLAGFLAGFLAGFLAGFLAGFLAG\n\n");
   if ( gcmd_line.display_info ) {
     output_planner_info(gRPG, nractions);
   }
-
-  sprintf(command3, "python addons/timemachine.py %s",fct_file);
-  system(command3);
 
   printf("\n\n");
   exit( 0 );

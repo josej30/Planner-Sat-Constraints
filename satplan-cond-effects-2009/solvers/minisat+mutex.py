@@ -65,13 +65,6 @@ for l in file(action_table_nf):
 
     id=int(l[2])
 
-    print l
-    action2id["(CLEAR"] = []
-    action2id["(CLEAR"].append(id)
-    current_var += 1
-    action2var["(CLEAR"] = int(current_var)
-    var2txt[int(current_var)] = "(CLEAR"
-
     if l[0].startswith('act'):
         result = has_obs(name)
         if result is not False:
@@ -106,7 +99,6 @@ if debug:
         print a, ":", action2var[a]
     print
     print observations
-    pri
 #     print
 #     print 'var2txt'
 #     for v in var2txt:

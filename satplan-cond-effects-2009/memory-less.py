@@ -72,20 +72,8 @@ if debug:
     print sys.argv
 
 predicates=parsepddl.get_predicates(domain_nf)
-print predicates
 if debug:
     print predicates
-
-##############################################
-# Codigo JJ
-##############################################
-#constraints=parsepddl.get_constraints(problem_nf)
-#print constraints
-#if debug:
-#    print constraints
-##############################################
-# Fin Codigo JJ
-##############################################
 
 # Obtaining observations and q-states
 obs=[]
