@@ -32,9 +32,7 @@ for l in at:
 	s = l.split()
 	if (s[-1]=="B)"):
 		if (s[-2]=="(ONTABLE"):
-			print s
-			temp.append(s[2])
-print temp
+                        temp.append(s[2])
 at.close()
 
 ########################################
@@ -58,7 +56,7 @@ for i in constraints:
 	print i
 
 for i in temp:
-	print i
+#	print i
 	cnf_new_f.write(str(i)+' ')
 cnf_new_f.write('0\n')
 

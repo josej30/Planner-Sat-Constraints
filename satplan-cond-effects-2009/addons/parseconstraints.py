@@ -1,4 +1,7 @@
+import os
+
 f = open("constraints.txt", 'r')
+f2 = open("constraintemp.txt","w")
 
 constraint = ""
 
@@ -12,5 +15,11 @@ for line in f:
 ind = constraint.index(' ')
 constraint = constraint[ind:]
 constraint = constraint.lstrip()
-constraint = constraint[0:-1]
-print constraint
+constraint = constraint[0:-2]
+
+f2.write(constraint)
+
+f.close()
+f2.close()
+
+os.system("mv constraintemp.txt constraints.txt")

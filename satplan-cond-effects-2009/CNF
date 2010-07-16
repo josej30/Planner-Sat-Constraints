@@ -1,4 +1,4 @@
-c CNF from NumPDDL2CNF, bound 12, -p  -o ../ejemplos/blocks/blocks-domain.pddl -f ../ejemplos/blocks/blocks-jose.pddl
+c CNF from NumPDDL2CNF, bound 12, -p  -o ejemplos/blocks-domain.pddl -f ejemplos/blocks-jose.pddl
 p cnf 1021 15180
 1 0
 2 0

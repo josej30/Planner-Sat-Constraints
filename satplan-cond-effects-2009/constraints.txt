@@ -1,5 +1,1 @@
-(:constraints (always CLEAR D)
-
-)
-
-)
+(always CLEAR D)
