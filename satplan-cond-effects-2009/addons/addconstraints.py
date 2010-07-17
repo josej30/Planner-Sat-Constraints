@@ -166,10 +166,21 @@ for cont in range(0,len(result)):
 
             print '\n\n**********\n\n'
 
-
         # Caso sometimes-after
         elif (codcons == 4):
             print '\n\n**********\n\n'
+
+            faux.write('-'+str(temp1[-1][0])+' ')
+            print '-',temp1[-1][0],
+            limit = temp1[-1][1]
+            maxvar = min(limit,len(temp2))
+            for it1 in range(0,maxvar):
+                if (temp1[it1][1]<temp1[-1][1]):
+                    faux.write(str(temp2[it1][0])+' ')
+                    print temp2[it1][0],
+            print
+            faux.write('0\n')
+                            
             print temp1
             print temp2
             print '\n\n**********\n\n'
