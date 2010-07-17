@@ -4,17 +4,22 @@
 
 (:objects D B A C - block)
 
-(:INIT 	(ON D C) 
-	(ON C B) 
-	(ON B A)
-	(CLEAR D)  
-	(ONTABLE A) 
+(:INIT 	(ON B A)
+	(CLEAR D)
+	(CLEAR C)    
+	(CLEAR B)  
+	(ONTABLE A)
+	(ONTABLE C) 
+	(ONTABLE D)  
 	(HANDEMPTY))
 
-(:goal (AND (ON D B) (ON C A) (ON B C)))
+(:goal (ON A B) )
 
-(:constraints (always CLEAR D)
-
-)
+;(:constraints (always CLEAR D)
+;
+;)
+;
+;
+;)
 
 )

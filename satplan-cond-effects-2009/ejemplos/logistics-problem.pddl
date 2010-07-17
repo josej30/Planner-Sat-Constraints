@@ -28,8 +28,5 @@
              (at obj21 pos1)
              (at obj23 pos1)))
 
-(:constraints (and (always p)
-		(sometimes x)
-)
 
 )
